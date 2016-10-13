@@ -1,0 +1,39 @@
+@import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
+body {
+    font-family: Dosis, sans-serif;
+}
+p {
+    color: lightgray;
+}
+
+.nav {
+    width: 100%;
+    background-color: #CCFFCC;
+    height: 75px;
+    text-align: center;
+    display: table;
+    box-shadow: 1px 1px 1px #888888;
+
+}
+
+.navMidHeader {
+    font-size: 36px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.loginImage {
+    float: left;
+    width: 50%;
+    height: 500px;
+    background-color: blue;
+    display: table;
+}
+
+.loginInfo {
+    float: right;
+    width: 50%;
+    height: 500px;
+    background-color: lightblue;
+    display: table;
+}

@@ -1,0 +1,17 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+    {% block navbar %}
+    <div class="nav">
+        <span class="navMidHeader">Welcome to Watchdog!</span>
+    </div>
+    {% endblock %}
+    <br>
+    <div class="loginImage"></div>
+    <div class="loginInfo">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+

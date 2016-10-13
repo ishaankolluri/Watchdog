@@ -1,9 +1,18 @@
 @import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
+
+a {
+    color: #CCFFCC;
+}
 body {
     font-family: Dosis, sans-serif;
 }
-p {
-    color: lightgray;
+
+input {
+    font-family: Dosis;
+    font-size: 25px;
+    margin-right: 5px;
+    border-radius: 6px;
+
 }
 
 .nav {
@@ -13,7 +22,6 @@ p {
     text-align: center;
     display: table;
     box-shadow: 1px 1px 1px #888888;
-
 }
 
 .navMidHeader {
@@ -25,15 +33,38 @@ p {
 .loginImage {
     float: left;
     width: 50%;
-    height: 500px;
-    background-color: blue;
+    height: 400px;
     display: table;
+}
+
+.dogImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 400px;
+    min-height: 500px;
 }
 
 .loginInfo {
     float: right;
     width: 50%;
     height: 500px;
-    background-color: lightblue;
+    /* background-color: lightblue; */
     display: table;
+}
+
+.loginForm {
+    font-size: 25px;
+    padding-top: 20px;
+    padding-left: 100px;
+}
+
+.submission {
+    font-size: 25px;
+    font-family: Dosis;
+    -webkit-box-shadow: none;
+    /* TODO: Remove Shadow. */
+    box-shadow: none;
+    background-color: #CCFFCC;
+    border-radius: 6px;
 }

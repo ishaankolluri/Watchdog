@@ -1,8 +1,23 @@
 {% extends 'login_base.html' %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="text" name="Username">Username
-</form>
+<div class="loginForm">
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>
+            <label>Username</label>
+            <br>
+            <input type="text" name="Username">
+        </p>
+        <p>
+            <label>Password</label>
+            <br>
+            <input type="text" name="Password">
+        </p>
+        <button class="submission" type="submit" value="Submit">Submit</button>
+        <br>
+        <a href="">Forgot your password?</a>
+    </form>
+</div>
+
 {% endblock %}

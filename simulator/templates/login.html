@@ -1,23 +1,44 @@
 {% extends 'login_base.html' %}
 
 {% block content %}
+    {% if form.errors %}
+
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+
+<p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+
+<p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
 <div class="loginForm">
-    <form action="" method="post">
+    <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <p>
-            <label>Username</label>
-            <br>
-            <input type="text" name="Username">
+        <p class="bs-component">
+            <table>
+                    <tr>
+                        <td>{{ form.username.label_tag }}</td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label_tag }}</td>
+                        <td>{{ form.password }}</td>
+                    </tr>
+            </table>
         </p>
-        <p>
-            <label>Password</label>
-            <br>
-            <input type="text" name="Password">
+        <p class="bs-component">
+            <input class="btn btn-success btn-sm" type="submit" value="Login" />
         </p>
-        <button class="submission" type="submit" value="Submit">Submit</button>
-        <br>
+        <!-- <input type="hidden" name="next" value="{{ next }}" /> -->
         <a href="">Forgot your password?</a>
     </form>
+    <a href="/signup"><button class="submission" value="Register">Register</button></a>
 </div>
 
 {% endblock %}

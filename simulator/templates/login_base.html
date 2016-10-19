@@ -1,5 +1,6 @@
+
 <head>
-    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
 </head>
 <body>
     {% block navbar %}
@@ -9,10 +10,13 @@
     {% endblock %}
     <br>
     <div class="loginImage">
-        <img class="dogImage" src="static/dog_stock.jpg" alt="image not found">
+        <img class="dogImage" src="../static/dog_stock.jpg" alt="image not found">
     </div>
     <div class="loginInfo">
         {% block content %}{% endblock %}
+    </div>
+    <div>
+         <a href="/logout">Logout</a>
     </div>
 
 </body>

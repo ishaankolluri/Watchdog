@@ -1,0 +1,36 @@
+{% extends 'login_base.html' %}
+
+{% block content %}
+    {% if form.errors %}
+{% endif %}
+
+<h1>Sign Up</h1>
+<div class="loginForm">
+    <form method="post" action="">
+        {% csrf_token %}
+        
+        {{ form }}
+
+<!--         <table>
+                    <tr>
+                        <td>{{ form.username.label_tag }}</td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label_tag }}</td>
+                        <td>{{ form.password }}</td>
+                    </tr>
+            </table>
+        </p> -->
+ <!--        <p class="bs-component">
+            <input class="btn btn-success btn-sm" type="submit" value="Login" />
+        </p>
+ -->
+        
+        <br>
+        <a href="/signedup"><input type="submit" value="Sign Up" /></a>
+
+    </form>
+</div>
+
+{% endblock %}

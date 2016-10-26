@@ -25,7 +25,7 @@ def signup(request):
         form = UserForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(**form.cleaned_data)
-            login(user)
+            #login(user)
             # return HttpResponseRedirect('home.html')
             return render(request, 'home.html')
     else:

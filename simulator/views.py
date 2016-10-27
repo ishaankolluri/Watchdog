@@ -21,7 +21,6 @@ def signup(request):
             return render(request, 'home.html')
     else:
         form = UserForm()
-
     return render(request, 'signup.html', {'form':form})
 
 
@@ -29,3 +28,6 @@ def signedup(request):
     return render(request, 'signedup.html')
 
 
+def profile(request):
+
+    return "hel"

@@ -1,2 +1,4 @@
 ase/
 db.sqlite3
+.idea
+*.pyc

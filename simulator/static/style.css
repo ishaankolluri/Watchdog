@@ -22,7 +22,7 @@ input {
 .nav {
     width: 100%;
     background-color: #CCFFCC;
-    height: 75px;
+    height: 48px;
     text-align: center;
     display: table;
     box-shadow: 1px 1px 1px #888888;
@@ -42,9 +42,9 @@ input {
 
 .nav li a {
     display: block;
-    color: white;
+    color: #CCFFCC;
     text-align: center;
-    padding: 14px 16px;
+    padding: 14px 50px;
     text-decoration: none;
 }
 
@@ -53,7 +53,7 @@ input {
 }
 
 .navMidHeader {
-    font-size: 36px;
+    font-size: 30px;
     display: table-cell;
     vertical-align: middle;
 }

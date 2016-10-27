@@ -110,3 +110,16 @@ input {
     position: absolute;
     right: 10px;
 }
+
+/* User Profile CSS */
+#userBasicInfo {
+    border: 5px solid black;
+    float: left;
+    width: 20%;
+}
+
+#userStockTable {
+    border: 5px solid lightgray;
+    float: right;
+    width: 75%;
+}

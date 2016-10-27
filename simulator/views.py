@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from simulator.forms import UserForm
+from simulator.models import Instrument, Position
 
 
 def home(request):
@@ -29,5 +30,6 @@ def signedup(request):
 
 
 def profile(request):
-
-    return "hel"
+    # How do I access the user data in the request?
+    print request.POST
+    return render(request, 'profile.html')

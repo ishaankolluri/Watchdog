@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_name %}User Profile{% endblock %}
+
+{% block content %}
+<div id="userBasicInfo">
+    <p>Name: </p>
+    <p>Portfolio Value: </p>
+</div>
+
+<div id="userStockTable">
+    <table style="border-spacing: 70px 0px;">
+        <tr>
+            <th>Stock Symbol</th>
+            <th>Quantity Purchased</th>
+            <th>Price Purchased</th>
+            <th>Market Price</th>
+            <th>Current Profit</th>
+        </tr>
+
+    </table>
+</div>
+
+{% endblock %}

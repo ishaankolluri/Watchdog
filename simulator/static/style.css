@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
+    @import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
 
 a {
     color: #CCFFCC;
@@ -67,4 +67,16 @@ input {
     box-shadow: none;
     background-color: #CCFFCC;
     border-radius: 6px;
+}
+
+.logout {
+    font-size: 15px;
+    font-family: Dosis;
+    -webkit-box-shadow: none;
+    /* TODO: Remove Shadow. */
+    box-shadow: none;
+    background-color: #CCFFCC;
+    border-radius: 6px;
+    position: absolute;
+    right: 10px;
 }

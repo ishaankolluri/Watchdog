@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<html lang="en-US">
 <head>
 <style>
+
+.modalinfobuttons{
+    background-color: #79bbff; /* Blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+
+}
+
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -51,6 +62,21 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.sameline{
+display: inline-block;
+}
+
+p {
+        color: #424242;
+        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+  letter-spacing:0.1em;
+  line-height: 200%;
+  font-size: 24pt;
+  font-variant: small-caps;
+        }
+
+
 </style>
   {% load static %}
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -70,10 +96,18 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">×</span>
-<input type="button" class="button" value="Input Button" id = "hit1">
-<input type="button" class="button" value="Input Button" id = "hit2">
-<input type="button" class="button" value="Input Button" id = "hit3">
-<input type="button" class="button" value="Input Button" id = "hit4">
+    
+    <div class="sameline"><pre><p>Stock Name:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
+    <div class="sameline"><pre><p>Stock Symbol:                 </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit2"></div><br><br>
+    <div class="sameline"><pre><p>Stock Market:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
+    <div class="sameline"><pre><p>Stock Price:                        </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
+    <div class="sameline"><pre><p>Last Trade Date and Time:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
+    
 
   </div>
 
@@ -127,7 +161,7 @@ window.onclick = function(event) {
   </div><!-- @end #w -->
 
 </body>
-</html>
+
 
 {% endblock%}
 

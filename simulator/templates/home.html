@@ -1,5 +1,55 @@
 {% extends 'base.html' %}
 
-{% block page_name %}Home{% endblock %}
 {% block content %}
-{% endblock %}
+<html lang="en-US">
+<head>
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+</style>
+  {% load static %}
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Stock WatchDog</title>
+    
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_home.css' %}">
+  <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/stock_company-autocomplete.js' %}"></script>
+</head>
+
+<body>
+  
+  <div id="w">
+    <div id="content">
+      <h1>Stock Market Company Lookup</h1>
+
+      
+      <div id="searchfield">
+        <form><input type="text" name="company" class="biginput" id="autocomplete" method="POST" placeholder="Search a company">
+         <button class="button" type = "submit" id = "hit" onclick="wordsearch(document.getElementById('autocomplete').value)">Search
+         </button>
+         
+        </form>
+
+      </div><!-- @end #searchfield -->
+      
+      <div id="outputbox">
+
+      </div>
+    </div><!-- @end #content -->
+  </div><!-- @end #w -->
+  <script src="{% static 'js/simulator.js' %}"></script>
+  
+  
+</body>
+</html>
+
+{% endblock%}
+

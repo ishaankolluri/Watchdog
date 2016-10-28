@@ -1,12 +1,27 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
-
+from django.http import HttpResponse
+from django.views.decorators.http import require_GET
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
+import json
+from googlefinance import getQuotes
 
 
 def home(request):
     return render(request, 'home.html')
+
+def getstockdata_views(request):
+    
+    query_str = str(request.GET['query'])
+    print(query_str)
+
+    p = json.dumps(getQuotes(query_str), indent=2)    
+    print(p)
+    return HttpResponse(p, content_type="application/json")
+
 
 
 def login(request):

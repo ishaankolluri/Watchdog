@@ -45,7 +45,12 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+}
+
+.modal-content form {
+    font-color: white;
+    text-align: center;
 }
 
 /* The Close Button */
@@ -76,6 +81,15 @@ p {
   font-variant: small-caps;
         }
 
+.toright{
+
+  position: absolute;
+    bottom: 380px;
+    right: 480;
+    width: 100px;
+    height: 50px;
+    
+}
 
 </style>
   {% load static %}
@@ -96,6 +110,7 @@ p {
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">×</span>
+
     
     <div class="sameline"><pre><p>Stock Name:               </p></pre></div>
     <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
@@ -105,14 +120,23 @@ p {
     <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
     <div class="sameline"><pre><p>Stock Price:                        </p></pre></div>
     <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
-    <div class="sameline"><pre><p>Last Trade Date and Time:               </p></pre></div>
+    <div class="sameline"><pre><p>Last Trade Date and Time: </p></pre></div>
     <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
     
 
+    <div class="toright"><form method="post" action="">
+          {% csrf_token %}
+          Quantity:
+          <input type="number" name="quantity" min="0">
+          Buy:
+          <input type="radio" name="market" value="buy">
+          Sell:
+          <input type="radio" name="market" value="sell">
+          <button type="submit" name="marketExecution">Go</button>
+    </form></div>
+
   </div>
-
 </div>
-
   <p id="demo"></p>
   <div id="w">
     <div id="content">
@@ -150,16 +174,10 @@ window.onclick = function(event) {
     }
 }
 </script>
-         
-         
         </form>
-
       </div><!-- @end #searchfield -->
-  
     </div><!-- @end #content -->
-
   </div><!-- @end #w -->
-
 </body>
 
 

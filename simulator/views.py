@@ -2,15 +2,14 @@ import json
 from googlefinance import getQuotes
 
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-
 
 
 def home(request):
@@ -23,6 +22,13 @@ def getstockdata_views(request):
     p = json.dumps(getQuotes(query_str))    
     print(p)
     return HttpResponse(p, content_type="application/json")
+
+
+def market_execution(request):
+    if request.POST:
+        print "Success"
+    # return HttpResponseRedirect(reverse('simulator:home'))
+    return render(request, 'home.html')
 
 
 def login(request):

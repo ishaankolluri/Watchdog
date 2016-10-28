@@ -34,7 +34,12 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+}
+
+.modal-content form {
+    font-color: white;
+    text-align: center;
 }
 
 /* The Close Button */
@@ -74,11 +79,19 @@
 <input type="button" class="button" value="Input Button" id = "hit2">
 <input type="button" class="button" value="Input Button" id = "hit3">
 <input type="button" class="button" value="Input Button" id = "hit4">
-
+    <br><br>
+    <form method="post" action=""><!-- Should be {% url 'market_execution' %}-->
+          {% csrf_token %}
+          Quantity:
+          <input type="number" name="quantity" min="0">
+          Buy:
+          <input type="radio" name="market" value="buy">
+          Sell:
+          <input type="radio" name="market" value="sell">
+          <button type="submit" name="marketExecution">Go</button>
+    </form>
   </div>
-
 </div>
-
   <p id="demo"></p>
   <div id="w">
     <div id="content">
@@ -116,16 +129,10 @@ window.onclick = function(event) {
     }
 }
 </script>
-         
-         
         </form>
-
       </div><!-- @end #searchfield -->
-  
     </div><!-- @end #content -->
-
   </div><!-- @end #w -->
-
 </body>
 </html>
 

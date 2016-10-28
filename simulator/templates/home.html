@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<html lang="en-US">
 <head>
 <style>
+
+.modalinfobuttons{
+    background-color: #79bbff; /* Blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+
+}
+
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -56,6 +67,30 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.sameline{
+display: inline-block;
+}
+
+p {
+        color: #424242;
+        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+  letter-spacing:0.1em;
+  line-height: 200%;
+  font-size: 24pt;
+  font-variant: small-caps;
+        }
+
+.toright{
+
+  position: absolute;
+    bottom: 380px;
+    right: 480;
+    width: 100px;
+    height: 50px;
+    
+}
+
 </style>
   {% load static %}
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -75,12 +110,21 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">×</span>
-<input type="button" class="button" value="Input Button" id = "hit1">
-<input type="button" class="button" value="Input Button" id = "hit2">
-<input type="button" class="button" value="Input Button" id = "hit3">
-<input type="button" class="button" value="Input Button" id = "hit4">
-    <br><br>
-    <form method="post" action=""><!-- Should be {% url 'market_execution' %}-->
+
+    
+    <div class="sameline"><pre><p>Stock Name:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
+    <div class="sameline"><pre><p>Stock Symbol:                 </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit2"></div><br><br>
+    <div class="sameline"><pre><p>Stock Market:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
+    <div class="sameline"><pre><p>Stock Price:                        </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
+    <div class="sameline"><pre><p>Last Trade Date and Time: </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
+    
+
+    <div class="toright"><form method="post" action="">
           {% csrf_token %}
           Quantity:
           <input type="number" name="quantity" min="0">
@@ -89,7 +133,8 @@
           Sell:
           <input type="radio" name="market" value="sell">
           <button type="submit" name="marketExecution">Go</button>
-    </form>
+    </form></div>
+
   </div>
 </div>
   <p id="demo"></p>
@@ -134,7 +179,7 @@ window.onclick = function(event) {
     </div><!-- @end #content -->
   </div><!-- @end #w -->
 </body>
-</html>
+
 
 {% endblock%}
 

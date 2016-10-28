@@ -8,6 +8,9 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^signup/', views.signup, name='signup'),
     url(r'^signedup/', views.signedup, name='signedup'),
-    url(r'^home/', views.home, name="home"),
     url(r'^profile/', views.profile, name='profile'),
+    url(r'^getstockdata_views/',views.getstockdata_views,name='getstockdata_views'),
 ]
+
+ 	
+ 

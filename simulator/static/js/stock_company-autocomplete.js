@@ -3169,12 +3169,13 @@ $(function(){
 
 function getstockdata(stocksymbol){
 
- $.getJSON("getstockdata_views", {query: stocksymbol},  function(response, status, jqXHR){
-           // do stuff
-           alert(jqXHR.responseText);
-       })
+ $.getJSON("getstockdata_views", {query: stocksymbol})
     .done(function(data){
-       //makeSymbolModal(data);
+
+       document.getElementById("hit1").value=data[0].StockSymbol;
+       document.getElementById("hit2").value=data[0].LastTradeWithCurrency;
+       document.getElementById("hit3").value=data[0].LastTradeDateTime;
+       document.getElementById("hit4").value=data[0].LastTradePrice;
 
 	
     })

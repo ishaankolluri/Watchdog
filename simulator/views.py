@@ -18,7 +18,7 @@ def getstockdata_views(request):
     query_str = str(request.GET['query'])
     print(query_str)
 
-    p = json.dumps(getQuotes(query_str), indent=2)    
+    p = json.dumps(getQuotes(query_str))    
     print(p)
     return HttpResponse(p, content_type="application/json")
 

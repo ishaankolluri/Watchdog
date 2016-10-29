@@ -78,6 +78,21 @@ def signedup(request):
 
 
 def profile(request):
-    # How do I access the user data in the request?
-    print request.POST
+    # Assuming that this view has access to the user.
+    # context = {}
+    # context["user"] = user
+
+    # positions = Position.objects.get(user=user)
+    # portfolio_value = 0
+    # instruments = []
+    # for position in positions:
+    #     i = Instrument.objects.get(symbol=position.symbol)
+        # TODO: Get updated price for every instrument the user has a position in.
+        # TODO: Use Google Finance?
+    #     portfolio_value = (portfolio_value + position.price_purchased - i.current_value)
+    #     instruments.append(i)
+    # context["portfolio_value"] = portfolio_value
+    # context["positions"] = positions
+    # context["instruments"] = instruments
+    # return render(request, 'profile.html', context=context)
     return render(request, 'profile.html')

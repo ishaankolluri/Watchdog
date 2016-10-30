@@ -17,11 +17,12 @@
     {% endif %}
 {% endif %}
 
+
 <div class="loginForm">
-    <form method="post" action="{% url 'login' %}">
+    <form action="{% url 'simulator:loggedin' %}" method="post">
         {% csrf_token %}
         <p class="bs-component">
-            <table>
+            <!-- <table>
                     <tr>
                         <td>{{ form.username.label_tag }}</td>
                         <td>{{ form.username }}</td>
@@ -30,15 +31,23 @@
                         <td>{{ form.password.label_tag }}</td>
                         <td>{{ form.password }}</td>
                     </tr>
-            </table>
+            </table> -->        
+            <label for='username'> Username: </label> 
+            <input id='username' type='text' name='username' maxlength='100' required /> <br> 
+            <label for='password'> Password: </label> 
+            <input id='password' type='text' name='password' maxlength='100' required /> <br> 
+            <input type='submit' value='Login' /> 
         </p>
-        <p class="bs-component">
+
+        <!-- <p class="bs-component">
             <input class="btn btn-success btn-sm" type="submit" value="Login" />
-        </p>
+        </p> -->
         <!-- <input type="hidden" name="next" value="{{ next }}" /> -->
-        <a href="">Forgot your password?</a>
     </form>
+
     <a href="/signup"><button class="submission" value="Register">Register</button></a>
+    <br>
+    <a href="">Forgot your password?</a>
 </div>
 
 {% endblock %}

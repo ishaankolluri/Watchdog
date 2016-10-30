@@ -9,12 +9,17 @@
             <li><a href="{% url 'simulator:profile' %}">Profile</a></li>
             <li><a href="">Leaderboard</a></li>
         </ul>
+        <p>Welcome {{ request.user.get_username }}</p>
     </div>
     {% endblock %}
     <div>
         <div class="row">
             <div>
-                <a href="/logout"><button class="logout" value="Login">Logout</button></a>
+                <!-- <a href="/login"><button class="logout" value="Login">Logout</button></a> -->
+                <form action="{% url 'simulator:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="logout">Logout</button>
+                </form>
                 <h1>{% block page_name %}{% endblock %}</h1>
             </div>
         </div>

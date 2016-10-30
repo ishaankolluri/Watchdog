@@ -2,10 +2,8 @@ import json
 from googlefinance import getQuotes
 
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 
 from simulator.forms import UserForm, LoginForm
@@ -18,11 +16,13 @@ from django.contrib.auth import authenticate, login, logout
 def is_authenticate(request):
     return request.user.is_authenticated
 
+
 def home(request):
     if is_authenticate(request):
         return render(request, 'home.html')
     else:
         return HttpResponseRedirect(reverse('simulator:login'))
+
 
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
@@ -30,6 +30,7 @@ def getstockdata_views(request):
     p = json.dumps(getQuotes(query_str))    
     print(p)
     return HttpResponse(p, content_type="application/json")
+
 
 def loggedin(request):
     if request.method == "POST":
@@ -42,6 +43,14 @@ def loggedin(request):
         else:
             return HttpResponseRedirect(reverse('simulator:login'))
     # return HttpResponseRedirect(reverse('simulator:home'))
+
+
+def market_execution(request):
+    if request.POST:
+        print "Success"
+    # return HttpResponseRedirect(reverse('simulator:home'))
+    return render(request, 'home.html')
+
 
 def login_req(request):
     return render(request, 'login.html')

@@ -1,13 +1,185 @@
-{% extends 'login_base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
+<head>
+<style>
 
-<div>
-    <div class="row">
-        <div>
-        	<a href="/logout"><button class="logout" value="Login">Logout</button></a>
-            <h1>Homepage</h1>            
-        </div>
-    </div>
+.modalinfobuttons{
+    background-color: #79bbff; /* Blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+}
+
+.modal-content form {
+    font-color: white;
+    text-align: center;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sameline{
+display: inline-block;
+}
+
+p {
+        color: #424242;
+        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+  letter-spacing:0.1em;
+  line-height: 200%;
+  font-size: 24pt;
+  font-variant: small-caps;
+        }
+
+.toright{
+
+  position: absolute;
+    bottom: 380px;
+    right: 480;
+    width: 100px;
+    height: 50px;
+    
+}
+
+</style>
+  {% load static %}
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Stock WatchDog</title>
+    
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_home.css' %}">
+  <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/stock_company-autocomplete.js' %}"></script>
+</head>
+
+<body>
+              <!-- The Modal -->
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">×</span>
+
+    
+    <div class="sameline"><pre><p>Stock Name:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
+    <div class="sameline"><pre><p>Stock Symbol:                 </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit2"></div><br><br>
+    <div class="sameline"><pre><p>Stock Market:               </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
+    <div class="sameline"><pre><p>Stock Price:                        </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
+    <div class="sameline"><pre><p>Last Trade Date and Time: </p></pre></div>
+    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
+    
+
+    <div class="toright"><form method="post" action="">
+          {% csrf_token %}
+          Quantity:
+          <input type="number" name="quantity" min="0">
+          Buy:
+          <input type="radio" name="market" value="buy">
+          Sell:
+          <input type="radio" name="market" value="sell">
+          <button type="submit" name="marketExecution">Go</button>
+    </form></div>
+
+  </div>
 </div>
-{% endblock %}
+  <p id="demo"></p>
+  <div id="w">
+    <div id="content">
+      <h1>Stock Market Company Lookup</h1>
+
+      
+      <div id="searchfield">
+        <form><input type="text" name="company" class="biginput" id="autocomplete" method="POST" placeholder="Search a company">
+         <a href="#" class="button" id="hit">Search</a>
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("hit");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+        </form>
+      </div><!-- @end #searchfield -->
+    </div><!-- @end #content -->
+  </div><!-- @end #w -->
+</body>
+
+
+{% endblock%}
+

@@ -1,5 +1,7 @@
-    @import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
+@import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
 
+
+/* Generic CSS */
 a {
     color: #CCFFCC;
 }
@@ -15,21 +17,49 @@ input {
 
 }
 
+/* Navigation Bar CSS */
+
 .nav {
     width: 100%;
     background-color: #CCFFCC;
-    height: 75px;
+    height: 48px;
     text-align: center;
     display: table;
     box-shadow: 1px 1px 1px #888888;
 }
 
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.nav li {
+    float: left;
+}
+
+.nav li a {
+    display: block;
+    color: #CCFFCC;
+    text-align: center;
+    padding: 14px 50px;
+    text-decoration: none;
+}
+
+.nav li a:hover {
+    background-color: #111;
+}
+
 .navMidHeader {
-    font-size: 36px;
+    font-size: 30px;
     display: table-cell;
     vertical-align: middle;
 }
 
+
+/* Login Pages CSS */
 .loginImage {
     float: left;
     width: 50%;
@@ -79,4 +109,17 @@ input {
     border-radius: 6px;
     position: absolute;
     right: 10px;
+}
+
+/* User Profile CSS */
+#userBasicInfo {
+    border: 5px solid black;
+    float: left;
+    width: 20%;
+}
+
+#userStockTable {
+    border: 5px solid lightgray;
+    float: right;
+    width: 75%;
 }

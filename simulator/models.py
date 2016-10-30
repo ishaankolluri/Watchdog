@@ -2,14 +2,44 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm
 
-# Create your models here.class UserForm(ModelForm):
 
-# class User(models.Model):
-#     username = models.CharField(label="Username", max_length=30, 
-#                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
-#     email = models.CharField(label="Email", max_length=30, 
-#                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'email'}))
-#     password = models.CharField(label="Password", max_length=30, 
-#                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'password'}))
+class Instrument(models.Model):
+    symbol = models.CharField(max_length=10)
+    current_price = models.DecimalField(decimal_places=3, max_digits=10)
+    last_time_updated = models.DateTimeField()
+
+    def update_price(self, retrieved_price):
+        if(retrieved_price < 0):
+            raise ValueError("Retrieved instrument price must be nonnegative.")
+
+        self.current_price = retrieved_price
+        self.save()
+
+    def __str__(self):
+        return "Symbol: {} | Current Price: {}".format(
+            self.symbol,
+            self.current_price,
+        )
+
+
+class Position(models.Model):
+    user = models.ForeignKey(User, related_name="user")
+    instrument = models.ForeignKey(
+        Instrument, on_delete=models.CASCADE, related_name="instrument")
+    symbol = models.CharField(max_length=10)
+    quantity_purchased = models.PositiveIntegerField()
+    price_purchased = models.DecimalField(decimal_places=3, max_digits=10)
+    date_purchased = models.DateTimeField()
+
+    def __str__(self):
+        return ("Symbol: {} | User: {} | Quantity: {}"
+                " | Price Purchased: {} | Current Price: {}".format(
+            self.symbol,
+            self.user,
+            self.quantity_purchased,
+            self.price_purchased,
+            self.instrument.current_price,
+        ))
+        # If we fetch current price in this unicode output,
+        # we may have to update instrument price frequently.

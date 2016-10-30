@@ -1,1 +1,8 @@
+configparser==3.5.0
 Django==1.10.2
+enum34==1.1.6
+flake8==3.0.4
+googlefinance==0.7
+mccabe==0.5.2
+pycodestyle==2.0.0
+pyflakes==1.2.3

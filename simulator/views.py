@@ -6,14 +6,22 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_GET
 
-from simulator.forms import UserForm
+from simulator.forms import UserForm, LoginForm
 from simulator.models import Instrument, Position
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
+from django.contrib.auth import authenticate, login, logout
+
+
+def is_authenticate(request):
+    return request.user.is_authenticated
 
 
 def home(request):
-    return render(request, 'home.html')
+    if is_authenticate(request):
+        return render(request, 'home.html')
+    else:
+        return HttpResponseRedirect(reverse('simulator:login'))
 
 
 def getstockdata_views(request):
@@ -24,6 +32,19 @@ def getstockdata_views(request):
     return HttpResponse(p, content_type="application/json")
 
 
+def loggedin(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect("/")
+        else:
+            return HttpResponseRedirect(reverse('simulator:login'))
+    # return HttpResponseRedirect(reverse('simulator:home'))
+
+
 def market_execution(request):
     if request.POST:
         print "Success"
@@ -31,8 +52,12 @@ def market_execution(request):
     return render(request, 'home.html')
 
 
-def login(request):
+def login_req(request):
     return render(request, 'login.html')
+
+def logout_req(request):
+    logout(request)
+    return HttpResponseRedirect("/login")
 
 
 def signup(request):
@@ -41,7 +66,8 @@ def signup(request):
         if form.is_valid():
             user = User.objects.create_user(**form.cleaned_data)
             user.save()
-            return render(request, 'home.html')
+            login(request, user)
+            return HttpResponseRedirect("/")
     else:
         form = UserForm()
     return render(request, 'signup.html', {'form':form})

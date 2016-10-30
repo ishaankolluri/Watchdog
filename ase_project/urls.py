@@ -19,8 +19,8 @@ from django.contrib.auth import views
 from simulator.forms import LoginForm
 
 urlpatterns = [
-    url(r'', include('simulator.urls')),
+    url(r'^', include('simulator.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name="login"),
-    url(r'^logout/$', views.logout, {'next_page': '/login'}), 
+    url(r'^login$', views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name="login"),
+    url(r'^logout$', views.logout, {'next_page': '/login'}), 
 ]

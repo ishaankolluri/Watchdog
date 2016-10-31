@@ -124,17 +124,18 @@ p {
     <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
     
 
-    <div class="toright"><form method="post" action="">
+    <div class="toright">
+      <form method="post" id="exec" action="{% url 'simulator:market_execution' %}">
           {% csrf_token %}
           Quantity:
-          <input type="number" name="quantity" min="0">
+          <input type="number" name="quantity" min="1" value="1">
           Buy:
-          <input type="radio" name="market" value="buy">
+          <input type="radio" name="market" value="buy" checked="checked">
           Sell:
           <input type="radio" name="market" value="sell">
           <button type="submit" name="marketExecution">Go</button>
-    </form></div>
-
+      </form>
+    </div>
   </div>
 </div>
   <p id="demo"></p>

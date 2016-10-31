@@ -81,7 +81,7 @@ def market_execution(request):
             pos.quantity_purchased += quantity
             pos.save()
         if execution == "sell":
-            if quantity > pos.quantity_purchased:
+            if int(quantity) > pos.quantity_purchased:
                 # Raise some error.
                 print "no"
             else:

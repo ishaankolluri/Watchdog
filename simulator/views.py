@@ -1,4 +1,4 @@
-import json
+import datetime, json
 from googlefinance import getQuotes
 
 from django.contrib.auth.models import User
@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login, logout
 
+
+CURRENT_STOCK_MODAL = ""
 
 def is_authenticate(request):
     return request.user.is_authenticated
@@ -27,7 +29,9 @@ def home(request):
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
     print(query_str)
-    p = json.dumps(getQuotes(query_str))    
+    p = json.dumps(getQuotes(query_str))
+    global CURRENT_STOCK_MODAL
+    CURRENT_STOCK_MODAL = p
     print(p)
     return HttpResponse(p, content_type="application/json")
 
@@ -46,10 +50,43 @@ def loggedin(request):
 
 
 def market_execution(request):
-    if request.POST:
-        print "Success"
-    # return HttpResponseRedirect(reverse('simulator:home'))
-    return render(request, 'home.html')
+    user = request.user
+    symbol = p["StockSymbol"]
+    quantity = request.POST["quantity"]
+    execution = request.POST["market"]
+    last_trade_price = p["LastTradePrice"]
+
+    ins = Instrument.objects.get(symbol=symbol)
+    if not ins:
+        ins = Instrument.objects.create(
+            symbol=symbol,
+            current_price=last_trade_price,
+            last_time_updated=datetime.datetime.now(),
+        )
+    # Check if user has a position
+    pos = Position.objects.get(user=user, symbol=symbol)
+    if not pos:
+        if execution == "buy":
+            Position.objects.create(
+                user=user,
+                instrument=ins,
+                symbol=symbol,
+                price_purchased=last_trade_price,
+                quantity_purchased=quantity,
+                date_purchased=datetime.datetime.now(),
+            )
+    else:
+        if execution == "buy":
+            pos.quantity_purchased += quantity
+            pos.save()
+        if execution == "sell":
+            if quantity > pos.quantity_purchased:
+                # Raise some error.
+                print "no"
+            else:
+                pos.quantity_purchased -= quantity
+
+    return HttpResponseRedirect(reverse("simulator:home"))
 
 
 def login_req(request):

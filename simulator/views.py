@@ -100,3 +100,4 @@ def profile(request):
     context["instruments"] = instruments
     return render(request, 'profile.html', context=context)
     # return render(request, 'profile.html')
+

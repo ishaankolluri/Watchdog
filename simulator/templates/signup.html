@@ -9,7 +9,7 @@
     <form method="post" action="">
         {% csrf_token %}
         
-        {{ form }}
+        {{ form.as_p }}
 
 <!--         <table>
                     <tr>

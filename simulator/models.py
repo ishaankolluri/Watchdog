@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from decimal import Decimal 
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -31,6 +32,10 @@ class Position(models.Model):
     quantity_purchased = models.PositiveIntegerField()
     price_purchased = models.DecimalField(decimal_places=3, max_digits=10)
     date_purchased = models.DateTimeField()
+
+    @property
+    def net_profit(self):
+        return self.quantity_purchased*(self.price_purchased - self.instrument.current_price)
 
     def __str__(self):
         return ("Symbol: {} | User: {} | Quantity: {}"

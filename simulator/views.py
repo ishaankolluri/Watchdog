@@ -21,6 +21,7 @@ def is_authenticate(request):
 
 def home(request):
     if is_authenticate(request):
+        # print(request.user)
         return render(request, 'home.html')
     else:
         return HttpResponseRedirect(reverse('simulator:login'))
@@ -118,6 +119,26 @@ def signedup(request):
 
 
 def profile(request):
-    # How do I access the user data in the request?
-    print request.POST
-    return render(request, 'profile.html')
+    # Assuming that this view has access to the user.
+    # print(request.user.username)
+    # print(request.user.password)
+    user = request.user
+    context = {}
+    context["user"] = user;
+    print(user.password)
+    positions = Position.objects.filter(user=request.user)
+    # position = Position.objects.get(user=request.user)
+    portfolio_value = 0
+    for position in positions:
+        i = Instrument.objects.get(symbol=position.symbol)
+        # TODO: Get updated price for every instrument the user has a position in.
+        # TODO: Use Google Finance?
+        portfolio_value = (portfolio_value + position.price_purchased - i.current_price)
+        print(position.net_profit)
+    print(positions)
+    context["portfolio_value"] = portfolio_value
+    context["positions"] = positions
+
+    return render(request, 'profile.html', context=context)
+    # return render(request, 'profile.html')
+

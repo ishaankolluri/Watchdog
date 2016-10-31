@@ -86,18 +86,19 @@ def profile(request):
     context = {}
     context["user"] = user;
     print(user.password)
-    positions = Position.objects.get(user=request.user)
+    positions = Position.objects.filter(user=request.user)
+    # position = Position.objects.get(user=request.user)
     portfolio_value = 0
-    instruments = []
     for position in positions:
         i = Instrument.objects.get(symbol=position.symbol)
         # TODO: Get updated price for every instrument the user has a position in.
         # TODO: Use Google Finance?
-        portfolio_value = (portfolio_value + position.price_purchased - i.current_value)
-        instruments.append(i)
+        portfolio_value = (portfolio_value + position.price_purchased - i.current_price)
+        print(position.net_profit)
+    print(positions)
     context["portfolio_value"] = portfolio_value
     context["positions"] = positions
-    context["instruments"] = instruments
+
     return render(request, 'profile.html', context=context)
     # return render(request, 'profile.html')
 

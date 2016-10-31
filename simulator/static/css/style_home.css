@@ -1,5 +1,7 @@
 /** resets **/
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+ h1{
+    font-family: Raleway, sans-serif;
   margin: 0;
   padding: 0;
   border: 0;
@@ -15,13 +17,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   box-sizing: border-box;
 }
 html { height: 101%; }
-body { 
-  background: #f0f0f0 url('images/bg.gif'); 
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #313131;
-  font-size: 62.5%; 
-  line-height: 1; 
-}
+
 
 ::selection { background: #a4dcec; }
 ::-moz-selection { background: #a4dcec; }
@@ -46,10 +42,10 @@ body {
 
 br { display: block; line-height: 2.2em; } 
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
-ol, ul { list-style: none; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, section { display: block; }
+ol { list-style: none; }
 
-input, textarea { 
+textarea { 
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -87,7 +83,7 @@ img { border: 0; max-width: 100%; }
 
 /** typography **/
 h1 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Raleway, sans-serif;
   font-size: 2.5em;
   line-height: 1.5em;
   letter-spacing: -0.05em;
@@ -124,10 +120,12 @@ h1 > span {
 }
 
 p {
+ font-weight: 10;
+    font-family: Raleway, sans-serif;
   display: block;
-  font-size: 1.35em;
+  font-size: 0.8em;
   line-height: 1.5em;
-  margin-bottom: 22px;
+  margin-bottom: 5px;
 }
 
 a { color: #5a9352; text-decoration: none; }
@@ -231,4 +229,5 @@ a:hover { text-decoration: underline; }
 .autocomplete-suggestion { padding: 10px 5px; font-size: 1.2em; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #f0f0f0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399ff; }
+
 

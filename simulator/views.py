@@ -134,7 +134,7 @@ def profile(request):
     portfolio_value = 0
     for position in positions:
         i = Instrument.objects.get(symbol=position.symbol)
-        updated_price = getQuotes(position.symbol)
+        updated_price = getQuotes([position.symbol, 'NASDAQ'])
         i.current_price = Decimal(updated_price[0]["LastTradePrice"])
         i.save()
         portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)

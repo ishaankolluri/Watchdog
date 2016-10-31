@@ -1,4 +1,4 @@
-import datetime, json
+import ast, datetime, json
 from googlefinance import getQuotes
 
 from django.contrib.auth.models import User
@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate, login, logout
 
 CURRENT_STOCK_MODAL = ""
 
+
 def is_authenticate(request):
     return request.user.is_authenticated
 
@@ -28,11 +29,9 @@ def home(request):
 
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
-    print(query_str)
     p = json.dumps(getQuotes(query_str))
     global CURRENT_STOCK_MODAL
-    CURRENT_STOCK_MODAL = p
-    print(p)
+    CURRENT_STOCK_MODAL = json.loads(p)[0]
     return HttpResponse(p, content_type="application/json")
 
 
@@ -51,21 +50,24 @@ def loggedin(request):
 
 def market_execution(request):
     user = request.user
-    symbol = p["StockSymbol"]
+    symbol = CURRENT_STOCK_MODAL["StockSymbol"]
     quantity = request.POST["quantity"]
     execution = request.POST["market"]
-    last_trade_price = p["LastTradePrice"]
+    last_trade_price = CURRENT_STOCK_MODAL["LastTradePrice"]
 
-    ins = Instrument.objects.get(symbol=symbol)
-    if not ins:
+    ins_set = Instrument.objects.filter(symbol=symbol)
+    if ins_set.count() == 0:
+        # Add local instruments to DB on an as-needed basis.
         ins = Instrument.objects.create(
             symbol=symbol,
             current_price=last_trade_price,
             last_time_updated=datetime.datetime.now(),
         )
-    # Check if user has a position
-    pos = Position.objects.get(user=user, symbol=symbol)
-    if not pos:
+    else:
+        ins = Instrument.objects.get(symbol=symbol)
+    # Check if user has a position.
+    pos_list = Position.objects.filter(user=user, instrument=ins)
+    if pos_list.count() == 0:
         if execution == "buy":
             Position.objects.create(
                 user=user,
@@ -76,6 +78,7 @@ def market_execution(request):
                 date_purchased=datetime.datetime.now(),
             )
     else:
+        pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
             pos.quantity_purchased += quantity
             pos.save()
@@ -85,12 +88,14 @@ def market_execution(request):
                 print "no"
             else:
                 pos.quantity_purchased -= quantity
+                pos.save()
 
     return HttpResponseRedirect(reverse("simulator:home"))
 
 
 def login_req(request):
     return render(request, 'login.html')
+
 
 def logout_req(request):
     logout(request)

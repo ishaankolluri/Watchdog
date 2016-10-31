@@ -1,16 +1,15 @@
-import ast, datetime, json
+import datetime
+import json
+
 from googlefinance import getQuotes
 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.http import require_GET
 
-from simulator.forms import UserForm, LoginForm
+from simulator.forms import UserForm
 from simulator.models import Instrument, Position
-from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
-from django.contrib.auth import authenticate, login, logout
 
 
 CURRENT_STOCK_MODAL = ""
@@ -45,7 +44,6 @@ def loggedin(request):
             return HttpResponseRedirect("/")
         else:
             return HttpResponseRedirect(reverse('simulator:login'))
-    # return HttpResponseRedirect(reverse('simulator:home'))
 
 
 def market_execution(request):
@@ -112,7 +110,7 @@ def signup(request):
             return HttpResponseRedirect("/")
     else:
         form = UserForm()
-    return render(request, 'signup.html', {'form':form})
+    return render(request, 'signup.html', {'form': form})
 
 
 def signedup(request):

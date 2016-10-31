@@ -100,7 +100,6 @@ p {
   <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/stock_company-autocomplete.js' %}"></script>
-  <script type="text/javascript" src="/static/js/market_execution.js"></script>
 </head>
 
 <body>
@@ -129,7 +128,7 @@ p {
       <form method="post" id="exec" action="{% url 'simulator:market_execution' %}">
           {% csrf_token %}
           Quantity:
-          <input type="number" name="quantity" min="0" value="1">
+          <input type="number" name="quantity" min="1" value="1">
           Buy:
           <input type="radio" name="market" value="buy">
           Sell:

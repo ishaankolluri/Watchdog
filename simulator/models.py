@@ -11,7 +11,7 @@ class Instrument(models.Model):
     last_time_updated = models.DateTimeField()
 
     def update_price(self, retrieved_price):
-        if(retrieved_price < 0):
+        if (retrieved_price < 0):
             raise ValueError("Retrieved instrument price must be nonnegative.")
 
         self.current_price = retrieved_price
@@ -39,12 +39,9 @@ class Position(models.Model):
 
     def __str__(self):
         return ("Symbol: {} | User: {} | Quantity: {}"
-                " | Price Purchased: {} | Current Price: {}".format(
-            self.symbol,
-            self.user,
-            self.quantity_purchased,
-            self.price_purchased,
-            self.instrument.current_price,
-        ))
+                " | Price Purchased: {} | Current Price: {}".
+                format(self.symbol, self.user, self.quantity_purchased,
+                       self.price_purchased, self.instrument.current_price, )
+                )
         # If we fetch current price in this unicode output,
         # we may have to update instrument price frequently.

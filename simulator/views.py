@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import json
 
 from googlefinance import getQuotes
@@ -79,15 +80,17 @@ def market_execution(request):
     else:
         pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
-            pos.quantity_purchased += quantity
+            pos.quantity_purchased += int(quantity)
             pos.save()
         if execution == "sell":
             if int(quantity) > pos.quantity_purchased:
                 # Raise some error.
                 print "no"
             else:
-                pos.quantity_purchased -= quantity
+                pos.quantity_purchased -= int(quantity)
                 pos.save()
+                if pos.quantity_purchased == 0:
+                    pos.delete()
 
     return HttpResponseRedirect(reverse("simulator:home"))
 
@@ -124,16 +127,17 @@ def profile(request):
     # print(request.user.password)
     user = request.user
     context = {}
-    context["user"] = user;
+    context["user"] = user
     print(user.password)
     positions = Position.objects.filter(user=request.user)
     # position = Position.objects.get(user=request.user)
     portfolio_value = 0
     for position in positions:
         i = Instrument.objects.get(symbol=position.symbol)
-        # TODO: Get updated price for every instrument the user has a position in.
-        # TODO: Use Google Finance?
-        portfolio_value = (portfolio_value + position.price_purchased - i.current_price)
+        updated_price = getQuotes(position.symbol)
+        i.current_price = Decimal(updated_price[0]["LastTradePrice"])
+        i.save()
+        portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)
         print(position.net_profit)
     print(positions)
     context["portfolio_value"] = portfolio_value

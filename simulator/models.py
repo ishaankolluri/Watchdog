@@ -35,7 +35,7 @@ class Position(models.Model):
 
     @property
     def net_profit(self):
-        return self.quantity_purchased*(self.price_purchased - self.instrument.current_price)
+        return self.quantity_purchased * (self.instrument.current_price - self.price_purchased)
 
     def __str__(self):
         return ("Symbol: {} | User: {} | Quantity: {}"

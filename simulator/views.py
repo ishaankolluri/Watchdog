@@ -19,6 +19,7 @@ def is_authenticate(request):
 
 def home(request):
     if is_authenticate(request):
+        # print(request.user)
         return render(request, 'home.html')
     else:
         return HttpResponseRedirect(reverse('simulator:login'))
@@ -47,7 +48,7 @@ def loggedin(request):
 
 def market_execution(request):
     if request.POST:
-        print "Success"
+        print ("Success")
     # return HttpResponseRedirect(reverse('simulator:home'))
     return render(request, 'home.html')
 
@@ -79,20 +80,23 @@ def signedup(request):
 
 def profile(request):
     # Assuming that this view has access to the user.
-    # context = {}
-    # context["user"] = user
-
-    # positions = Position.objects.get(user=user)
-    # portfolio_value = 0
-    # instruments = []
-    # for position in positions:
-    #     i = Instrument.objects.get(symbol=position.symbol)
+    # print(request.user.username)
+    # print(request.user.password)
+    user = request.user
+    context = {}
+    context["user"] = user;
+    print(user.password)
+    positions = Position.objects.get(user=request.user)
+    portfolio_value = 0
+    instruments = []
+    for position in positions:
+        i = Instrument.objects.get(symbol=position.symbol)
         # TODO: Get updated price for every instrument the user has a position in.
         # TODO: Use Google Finance?
-    #     portfolio_value = (portfolio_value + position.price_purchased - i.current_value)
-    #     instruments.append(i)
-    # context["portfolio_value"] = portfolio_value
-    # context["positions"] = positions
-    # context["instruments"] = instruments
-    # return render(request, 'profile.html', context=context)
-    return render(request, 'profile.html')
+        portfolio_value = (portfolio_value + position.price_purchased - i.current_value)
+        instruments.append(i)
+    context["portfolio_value"] = portfolio_value
+    context["positions"] = positions
+    context["instruments"] = instruments
+    return render(request, 'profile.html', context=context)
+    # return render(request, 'profile.html')

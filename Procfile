@@ -1,0 +1,1 @@
+web: gunicorn ase_project.wsgi

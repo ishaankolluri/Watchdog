@@ -1,8 +1,14 @@
 configparser==3.5.0
+dj-database-url==0.4.1
+dj-static==0.0.6
 Django==1.10.2
+django-toolbelt==0.0.1
 enum34==1.1.6
 flake8==3.0.4
 googlefinance==0.7
+gunicorn==19.6.0
 mccabe==0.5.2
+psycopg2==2.6.2
 pycodestyle==2.0.0
 pyflakes==1.2.3
+static3==0.7.0

@@ -54,7 +54,6 @@ def market_execution(request):
     quantity = request.POST["quantity"]
     execution = request.POST["market"]
     last_trade_price = CURRENT_STOCK_MODAL["LastTradePrice"]
-
     ins_set = Instrument.objects.filter(symbol=symbol)
     if ins_set.count() == 0:
         ins = Instrument.objects.create(
@@ -87,11 +86,14 @@ def market_execution(request):
                     "Your market buy wasn't processed. Please try again.")
         if execution == "sell":
             if pos.market_sell(quantity):
-                messages.success("You have placed a market sell.")
+                if pos.quantity_purchased == 0:
+                    pos.delete()
+                messages.success(request, "You have placed a market sell.")
             else:
+                print "failed?"
                 messages.success(
                     request,
-                    'Please do not attempt to sell more'
+                    'Please do not attempt to sell more '
                     'than you currently own of this stock.')
     return HttpResponseRedirect(reverse("simulator:home"))
 

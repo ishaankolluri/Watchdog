@@ -38,12 +38,11 @@ class Position(models.Model):
         return True
 
     def market_sell(self, quantity):
-        if quantity > self.quantity_purchased:
+        if Decimal(quantity) > self.quantity_purchased:
             return False
         else:
             self.quantity_purchased -= Decimal(quantity)
-            if self.quantity_purchased == 0:
-                self.delete()
+            self.save()
             return True
 
     @property

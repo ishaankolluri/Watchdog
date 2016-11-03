@@ -50,6 +50,13 @@
     </div>
   </div>
 </div>
+<div class="outerMarketStatus">
+    {% if messages %}
+        {% for message in messages %}
+            <p class="innerMarketStatus">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+</div>
   <p id="demo"></p>
   <div id="w">
     <div id="content">

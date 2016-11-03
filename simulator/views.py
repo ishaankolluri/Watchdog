@@ -4,6 +4,7 @@ import json
 
 from googlefinance import getQuotes
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, reverse
@@ -22,7 +23,6 @@ def is_authenticate(request):
 
 def home(request):
     if is_authenticate(request):
-        # print(request.user)
         return render(request, 'home.html')
     else:
         return HttpResponseRedirect(reverse('simulator:login'))
@@ -57,7 +57,6 @@ def market_execution(request):
 
     ins_set = Instrument.objects.filter(symbol=symbol)
     if ins_set.count() == 0:
-        # Add local instruments to DB on an as-needed basis.
         ins = Instrument.objects.create(
             symbol=symbol,
             current_price=last_trade_price,
@@ -65,7 +64,6 @@ def market_execution(request):
         )
     else:
         ins = Instrument.objects.get(symbol=symbol)
-    # Check if user has a position.
     pos_list = Position.objects.filter(user=user, instrument=ins)
     if pos_list.count() == 0:
         if execution == "buy":
@@ -80,18 +78,21 @@ def market_execution(request):
     else:
         pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
-            pos.quantity_purchased += int(quantity)
-            pos.save()
-        if execution == "sell":
-            if int(quantity) > pos.quantity_purchased:
-                # Raise some error.
-                print "no"
+            if pos.market_buy(quantity):
+                messages.success(
+                    request, "You have placed a market buy.")
             else:
-                pos.quantity_purchased -= int(quantity)
-                pos.save()
-                if pos.quantity_purchased == 0:
-                    pos.delete()
-
+                messages.success(
+                    request,
+                    "Your market buy wasn't processed. Please try again.")
+        if execution == "sell":
+            if pos.market_sell(quantity):
+                messages.success("You have placed a market sell.")
+            else:
+                messages.success(
+                    request,
+                    'Please do not attempt to sell more'
+                    'than you currently own of this stock.')
     return HttpResponseRedirect(reverse("simulator:home"))
 
 
@@ -122,27 +123,15 @@ def signedup(request):
 
 
 def profile(request):
-    # Assuming that this view has access to the user.
-    # print(request.user.username)
-    # print(request.user.password)
     user = request.user
-    context = {}
-    context["user"] = user
-    print(user.password)
+    context = {"user": user}
     positions = Position.objects.filter(user=request.user)
-    # position = Position.objects.get(user=request.user)
     portfolio_value = 0
     for position in positions:
         i = Instrument.objects.get(symbol=position.symbol)
-        updated_price = getQuotes([position.symbol, 'NASDAQ'])
-        i.current_price = Decimal(updated_price[0]["LastTradePrice"])
-        i.save()
+        updated_price = getQuotes([position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
+        i.update_price(updated_price)
         portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)
-        print(position.net_profit)
-    print(positions)
     context["portfolio_value"] = portfolio_value
     context["positions"] = positions
-
     return render(request, 'profile.html', context=context)
-    # return render(request, 'profile.html')
-

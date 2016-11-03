@@ -124,16 +124,22 @@ p.uppercase {
 
 /* User Profile CSS */
 #userBasicInfo {
-    border: 5px solid black;
+    border: 1px solid #CCFFCC;
     float: left;
     width: 20%;
 }
 
 #userStockTable {
-    border: 5px solid lightgray;
+    border: 1px solid #CCFFCC;
     float: right;
     width: 75%;
 }
 
-
-
+.outerMarketStatus {
+    width: 100%;
+    text-align: center;
+}
+.innerMarketStatus {
+    display: inline-block;
+    font-size: 30px;
+}

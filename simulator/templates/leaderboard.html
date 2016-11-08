@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Stock Leaderboard{% endblock %}
+
+{% block content %}
+
+<div class="leaderboardContainer">
+    <table class="leaderboardTable" style="align: center; border: 1px solid #CCFFCC;">
+        <tr>
+            <th>Ranking</th>
+            <th>User</th>
+            <th>Portfolio Value</th>
+            <th>Net +/-</th>
+        </tr>
+        {% if users %}
+            {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user.user.username }}</td>
+                    <td>{{ user.portfolio_value }}</td>
+                    <td>{{ user.net_plus_minus }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+</div>
+{% endblock %}

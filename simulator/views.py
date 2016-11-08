@@ -167,13 +167,3 @@ def _update_and_return_user_portfolio_value(user):
         portfolio_value = portfolio_value + (i.current_price * position.quantity_purchased)
         net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
     return portfolio_value, net_plus_minus
-
-
-
-
-
-
-
-
-
-

@@ -152,3 +152,31 @@ class UITests(TestCase):
         ).quantity_purchased
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
+
+    def test_leaderboard(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        user_two = User.objects.create_user(
+            username="test_user",
+            email="test@test.com",
+            password="test",
+        )
+        user_two.save()
+        Position.objects.create(
+            user=user_two,
+            instrument=self.instrument,
+            symbol="PIH",
+            price_purchased=Decimal(50.00),
+            quantity_purchased=2,
+            date_purchased=datetime.now(),
+        )
+        request = self.factory.get(reverse('simulator:leaderboard'))
+        request.user = self.user
+        response = views.leaderboard(request)
+        # Not that self.user is first and user_two should be second.
+        # The whitespace is for syntactic sugar.
+        self.assertIn(
+            "<td>1</td>\n                    "
+            "<td>ishaankolluri</td>\n", response.content)
+        self.assertIn(
+            "<td>2</td>\n                    "
+            "<td>test_user</td>\n", response.content)

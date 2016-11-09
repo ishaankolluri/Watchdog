@@ -20,7 +20,6 @@ class UITests(TestCase):
             password="watchdog",
         )
         self.user.save()
-        # Note that datetimes are still naive. This will spawn warnings.
         self.instrument = Instrument.objects.create(
             symbol="PIH",
             current_price=Decimal(50.00),

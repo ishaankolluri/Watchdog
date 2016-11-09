@@ -1,4 +1,4 @@
-import json, mock
+import json
 from datetime import datetime
 from decimal import Decimal
 
@@ -152,9 +152,3 @@ class UITests(TestCase):
         ).quantity_purchased
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
-
-
-
-
-
-

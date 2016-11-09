@@ -143,3 +143,13 @@ p.uppercase {
     display: inline-block;
     font-size: 20px;
 }
+
+/* Leaderboard CSS */
+.leaderboardContainer {
+    text-align: center;
+}
+
+.leaderboardTable{
+    align: center;
+    border: 1px solid #CCFFCC;
+}

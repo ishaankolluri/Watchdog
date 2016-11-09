@@ -16,4 +16,6 @@ urlpatterns = [
         name='getstockdata_views'),
     url(r'^market_execution/', views.market_execution,
         name="market_execution"),
+    url(r'leaderboard/', views.leaderboard,
+        name="leaderboard")
 ]

@@ -90,7 +90,6 @@ def market_execution(request):
                     pos.delete()
                 messages.success(request, "You have placed a market sell.")
             else:
-                print "failed?"
                 messages.success(
                     request,
                     'Please do not attempt to sell more '

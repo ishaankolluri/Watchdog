@@ -8,7 +8,7 @@
         <ul>
             <li><a href="{% url 'simulator:home' %}">Home</a></li>
             <li><a href="{% url 'simulator:profile' %}">Profile</a></li>
-            <li><a href="">Leaderboard</a></li>
+            <li><a href="{% url 'simulator:leaderboard' %}">Leaderboard</a></li>
         </ul>
         <p class="uppercase">Welcome {{ request.user.get_username }}</p>
     </div>

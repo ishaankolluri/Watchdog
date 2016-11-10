@@ -1,35 +1,76 @@
-    @import url(http://fonts.googleapis.com/css?family=Dosis:regular,bold);
+@import url(http://fonts.googleapis.com/css?family=Raleway);
 
+
+/* Generic CSS */
 a {
     color: #CCFFCC;
 }
 body {
-    font-family: Dosis, sans-serif;
+    font-family: Raleway, sans-serif;
 }
 
+
+
 input {
-    font-family: Dosis;
+    font-family: Raleway, sans-serif;
     font-size: 25px;
     margin-right: 5px;
     border-radius: 6px;
 
 }
 
+/* Navigation Bar CSS */
+
 .nav {
     width: 100%;
     background-color: #CCFFCC;
-    height: 75px;
+    height: 48px;
     text-align: center;
     display: table;
     box-shadow: 1px 1px 1px #888888;
 }
 
+p.uppercase {
+    text-transform: uppercase;
+
+ font-weight: 10;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.nav li {
+    float: left;
+}
+
+.nav li a {
+    display: block;
+    color: #CCFFCC;
+    text-align: center;
+    padding: 14px 50px;
+    text-decoration: none;
+}
+
+.nav li a:hover {
+    background-color: #111;
+}
+
 .navMidHeader {
-    font-size: 36px;
+    font-size: 30px;
     display: table-cell;
     vertical-align: middle;
 }
 
+
+/* Login Pages CSS */
 .loginImage {
     float: left;
     width: 50%;
@@ -79,4 +120,36 @@ input {
     border-radius: 6px;
     position: absolute;
     right: 10px;
+}
+
+/* User Profile CSS */
+#userBasicInfo {
+    border: 1px solid #CCFFCC;
+    float: left;
+    width: 20%;
+}
+
+#userStockTable {
+    border: 1px solid #CCFFCC;
+    float: right;
+    width: 75%;
+}
+
+.outerMarketStatus {
+    width: 100%;
+    text-align: center;
+}
+.innerMarketStatus {
+    display: inline-block;
+    font-size: 20px;
+}
+
+/* Leaderboard CSS */
+.leaderboardContainer {
+    text-align: center;
+}
+
+.leaderboardTable{
+    align: center;
+    border: 1px solid #CCFFCC;
 }

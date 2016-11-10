@@ -1,8 +1,10 @@
 import datetime
+from decimal import Decimal
 import json
 
 from googlefinance import getQuotes
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, reverse
@@ -52,10 +54,8 @@ def market_execution(request):
     quantity = request.POST["quantity"]
     execution = request.POST["market"]
     last_trade_price = CURRENT_STOCK_MODAL["LastTradePrice"]
-
     ins_set = Instrument.objects.filter(symbol=symbol)
     if ins_set.count() == 0:
-        # Add local instruments to DB on an as-needed basis.
         ins = Instrument.objects.create(
             symbol=symbol,
             current_price=last_trade_price,
@@ -63,7 +63,6 @@ def market_execution(request):
         )
     else:
         ins = Instrument.objects.get(symbol=symbol)
-    # Check if user has a position.
     pos_list = Position.objects.filter(user=user, instrument=ins)
     if pos_list.count() == 0:
         if execution == "buy":
@@ -78,16 +77,23 @@ def market_execution(request):
     else:
         pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
-            pos.quantity_purchased += quantity
-            pos.save()
-        if execution == "sell":
-            if quantity > pos.quantity_purchased:
-                # Raise some error.
-                print "no"
+            if pos.market_buy(quantity):
+                messages.success(
+                    request, "You have placed a market buy.")
             else:
-                pos.quantity_purchased -= quantity
-                pos.save()
-
+                messages.success(
+                    request,
+                    "Your market buy wasn't processed. Please try again.")
+        if execution == "sell":
+            if pos.market_sell(quantity):
+                if pos.quantity_purchased == 0:
+                    pos.delete()
+                messages.success(request, "You have placed a market sell.")
+            else:
+                messages.success(
+                    request,
+                    'Please do not attempt to sell more '
+                    'than you currently own of this stock.')
     return HttpResponseRedirect(reverse("simulator:home"))
 
 
@@ -118,6 +124,45 @@ def signedup(request):
 
 
 def profile(request):
-    # How do I access the user data in the request?
-    print request.POST
-    return render(request, 'profile.html')
+    user = request.user
+    context = {"user": user}
+    positions = Position.objects.filter(user=request.user)
+    portfolio_value = 0
+    for position in positions:
+        i = Instrument.objects.get(symbol=position.symbol)
+        updated_price = getQuotes([position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
+        i.update_price(updated_price)
+        portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)
+    context["portfolio_value"] = portfolio_value
+    context["positions"] = positions
+    return render(request, 'profile.html', context=context)
+
+
+def leaderboard(request):
+    users = User.objects.all()
+    user_list = []
+    context = {}
+    for user in users:
+        portfolio_value, net_plus_minus = _update_and_return_user_portfolio_value(user)
+        user_struct = {
+            "user": user,
+            "portfolio_value": portfolio_value,
+            "net_plus_minus": net_plus_minus,
+        }
+        user_list.append(user_struct)
+    context["users"] = user_list
+    return render(request, 'leaderboard.html', context=context)
+
+
+def _update_and_return_user_portfolio_value(user):
+    positions = Position.objects.filter(user=user)
+    portfolio_value = 0
+    net_plus_minus = 0
+    for position in positions:
+        i = position.instrument
+        updated_price = getQuotes(
+            [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
+        i.update_price(updated_price)
+        portfolio_value = portfolio_value + (i.current_price * position.quantity_purchased)
+        net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
+    return portfolio_value, net_plus_minus

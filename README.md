@@ -14,7 +14,7 @@ See the `requirements.txt` file for what is installed in the virtualenv.
 
 ## Setup
 Clone the repository. Then, `cd` into the parent directory. To enter the virtual environment, run `source ase/bin/activate`
-and make sure you run `./manage.py migrate` to configure your, initial DB.
+and make sure you run `./manage.py migrate` to configure your initial DB.
 
 Next, run `./manage.py runserver` to start the application. 
 

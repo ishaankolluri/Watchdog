@@ -1,5 +1,6 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+{% load static %}
+   <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style.css' %}">
 </head>
 <body>
     {% block navbar %}
@@ -7,9 +8,9 @@
         <ul>
             <li><a href="{% url 'simulator:home' %}">Home</a></li>
             <li><a href="{% url 'simulator:profile' %}">Profile</a></li>
-            <li><a href="">Leaderboard</a></li>
+            <li><a href="{% url 'simulator:leaderboard' %}">Leaderboard</a></li>
         </ul>
-        <p>Welcome {{ request.user.get_username }}</p>
+        <p class="uppercase">Welcome {{ request.user.get_username }}</p>
     </div>
     {% endblock %}
     <div>

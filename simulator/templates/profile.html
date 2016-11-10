@@ -4,20 +4,31 @@
 
 {% block content %}
 <div id="userBasicInfo">
-    <p>Name: </p>
-    <p>Portfolio Value: </p>
+    <p>Name: {{ user.username}}</p>
+    <p>Portfolio Value: {{ portfolio_value }} </p>
 </div>
 
 <div id="userStockTable">
-    <table style="border-spacing: 70px 0px;">
+    <table style="border-spacing: 90px 0px;">
         <tr>
-            <th>Stock Symbol</th>
+            <th>Stock Symbol</th> 
             <th>Quantity Purchased</th>
             <th>Price Purchased</th>
             <th>Market Price</th>
-            <th>Current Profit</th>
+            <th>Current Net Profit</th>
         </tr>
-
+        
+        {% if positions %}
+        {% for position in positions %}
+        <tr> 
+            <td>{{ position.symbol }}</td>
+            <td>{{ position.quantity_purchased }}</td>
+            <td>{{ position.price_purchased }}</td>
+            <td>{{ position.instrument.current_price }}</td>
+            <td>{{ position.net_profit }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}    
     </table>
 </div>
 

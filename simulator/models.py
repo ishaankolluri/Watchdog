@@ -33,6 +33,8 @@ class Position(models.Model):
 
     # TODO: Needs to be an atomic transaction.
     def market_buy(self, quantity):
+        if Decimal(quantity) >= 500:
+            return False
         self.quantity_purchased += Decimal(quantity)
         self.save()
         return True

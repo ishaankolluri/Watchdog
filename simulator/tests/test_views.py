@@ -164,6 +164,28 @@ class UITests(TestCase):
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
 
+        # Attempt and fail a market sell on a stock you don't own.
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        self.assertEqual("AVHI", views.CURRENT_STOCK_MODAL["StockSymbol"])
+        request = self.factory.post(reverse('simulator:market_execution'), {
+            "quantity": "5",
+            "market": "sell",
+        })
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        views.market_execution(request)
+        new_ins = Instrument.objects.get(symbol="AVHI")
+        self.assertIsNotNone(new_ins)
+        new_pos_list = Position.objects.filter(
+            instrument=new_ins, user=self.user)
+        self.assertEquals(new_pos_list.count(), 0)
+
         # Perform a market buy on a brand new stock - MSFT.
         request = self.factory.get(reverse('simulator:getstockdata_views'), {
             "query": "MSFT"

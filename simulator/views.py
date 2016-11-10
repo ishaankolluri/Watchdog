@@ -74,6 +74,10 @@ def market_execution(request):
                 quantity_purchased=quantity,
                 date_purchased=datetime.datetime.now(),
             )
+        else:
+            # Selling a stock you don't own.
+            messages.success(
+                request, "You cannot sell a stock you do not own.")
     else:
         pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
@@ -83,7 +87,8 @@ def market_execution(request):
             else:
                 messages.success(
                     request,
-                    "Your market buy wasn't processed. Please buy less than 500 stocks at a time.")
+                    "Your market buy wasn't processed. "
+                    "Please buy less than 500 stocks at a time.")
         if execution == "sell":
             if pos.market_sell(quantity):
                 if pos.quantity_purchased == 0:

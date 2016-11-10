@@ -40,10 +40,16 @@ class UITests(TestCase):
     def test_secure_page(self):
         # Test that the user cannot access restricted pages without logging in.
         with self.assertRaises(TypeError) as context:
+            # Note 'profile' is a page that requires authentication.
             self.client.get(reverse('simulator:profile'))
         self.assertIn(
             "\'AnonymousUser\' object is not iterable",
             context.exception.message)
+        # Now log in the user - this should return a valid response.
+        self.client.login(username="ishaankolluri", password="watchdog")
+        response = self.client.get(reverse('simulator:profile'))
+        # Our username should be displayed on all restricted views.
+        self.assertIn("ishaankolluri", response.content)
 
     def test_login_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -78,6 +84,12 @@ class UITests(TestCase):
         # Test the profile contains new positions created in the DB.
         response = self.client.get(reverse('simulator:profile'))
         self.assertIn("MSFT", response.content)
+        # Test the profile reflects changes to existing positions.
+        p.quantity_purchased = 5
+        p.save()
+        response = self.client.get(reverse('simulator:profile'))
+        # MSFT is the only stock that should have a quantity of 5.
+        self.assertIn("<td>5</td>", response.content)
 
     def test_home_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -152,6 +164,27 @@ class UITests(TestCase):
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
 
+        # Perform a market buy on a brand new stock - MSFT.
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "MSFT"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        self.assertEqual("MSFT", views.CURRENT_STOCK_MODAL["StockSymbol"])
+        request = self.factory.post(reverse('simulator:market_execution'), {
+            "quantity": "5",
+            "market": "buy",
+        })
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        views.market_execution(request)
+        new_ins = Instrument.objects.get(symbol="MSFT")
+        self.assertIsNotNone(new_ins)
+        new_pos = Position.objects.get(instrument=new_ins)
+        self.assertIsNotNone(new_pos)
+
     def test_leaderboard(self):
         self.client.login(username="ishaankolluri", password="watchdog")
         user_two = User.objects.create_user(
@@ -160,7 +193,7 @@ class UITests(TestCase):
             password="test",
         )
         user_two.save()
-        Position.objects.create(
+        pos_two = Position.objects.create(
             user=user_two,
             instrument=self.instrument,
             symbol="PIH",

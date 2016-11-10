@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal 
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 
 
@@ -10,7 +10,7 @@ class Instrument(models.Model):
     current_price = models.DecimalField(decimal_places=3, max_digits=10)
     last_time_updated = models.DateTimeField()
 
-    # TODO: Needs to be an atomic transaction.
+    @transaction.atomic
     def update_price(self, retrieved_price):
         self.current_price = Decimal(retrieved_price)
         self.save()
@@ -31,7 +31,7 @@ class Position(models.Model):
     price_purchased = models.DecimalField(decimal_places=3, max_digits=10)
     date_purchased = models.DateTimeField()
 
-    # TODO: Needs to be an atomic transaction.
+    @transaction.atomic
     def market_buy(self, quantity):
         if Decimal(quantity) >= 500:
             return False
@@ -39,6 +39,7 @@ class Position(models.Model):
         self.save()
         return True
 
+    @transaction.atomic
     def market_sell(self, quantity):
         if Decimal(quantity) > self.quantity_purchased:
             return False

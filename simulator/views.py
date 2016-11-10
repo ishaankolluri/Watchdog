@@ -83,7 +83,7 @@ def market_execution(request):
             else:
                 messages.success(
                     request,
-                    "Your market buy wasn't processed. Please buy lesser than 500 stocks at a time.")
+                    "Your market buy wasn't processed. Please buy less than 500 stocks at a time.")
         if execution == "sell":
             if pos.market_sell(quantity):
                 if pos.quantity_purchased == 0:

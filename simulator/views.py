@@ -14,8 +14,6 @@ from simulator.forms import UserForm
 from simulator.models import Instrument, Position
 
 
-CURRENT_STOCK_MODAL = ""
-
 
 def is_authenticate(request):
     return request.user.is_authenticated

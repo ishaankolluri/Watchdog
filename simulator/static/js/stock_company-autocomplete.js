@@ -6724,9 +6724,44 @@ function getstockdata(stocksymbol){
 
        document.getElementById("hit2").value=data[0].StockSymbol;
        document.getElementById("hit3").value=data[0].Index;
-       document.getElementById("hit4").value=data[0].LastTradeWithCurrency;
+       document.getElementById("hit4").value=data[0].LastTradePrice;
        document.getElementById("hit5").value=data[0].LastTradeDateTime;
+	//exec is the form id. When form is submitted do something.
+	$("#exec").submit(function(){
+	//if radio1(buy) is selected then do something
+	if($("#radio1").prop("checked")){
+	
+	//We already have these values as we are inside getstockdata() in JS
+	buydata = {
+		   "symbol" : data[0].StockSymbol, 
+		   "price" : data[0].LastTradePrice, 
+                   "quantity" : document.getElementById("quant").value, 
+		   "execution" : "buy"
 
+			}	
+	//call market_execution function in the controller and send buydata to it.
+	$.get("market_execution",buydata).done(function(data){
+	//This is a get function which expects to get something. But we return HttpResponseRedirect from market_execution which leads to a page being rendered. Because of this get() never recieves anything. Therefore you will notice a broken pipe message in the terminal. This can be ignored.
+	});	
+	}
+	//If radio2(sell) is selected then do something
+	if($("#radio2").prop("checked")){
+	
+	//only difference is execution tag. This is a hacky way to help our controller know if it was a buy or sell operation on the frontend.
+	//If we plan on splitting market_execution on buy and sell
+	selldata = {"symbol" : data[0].StockSymbol, 
+		   "price" : data[0].LastTradePrice, 
+                   "quantity" : document.getElementById("quant").value, 
+		   "execution" : "sell"
+
+			}	
+
+	$.get("market_execution",selldata).done(function(data){
+
+	});	
+
+	}
+});
 
 	
     })
@@ -6736,21 +6771,3 @@ function getstockdata(stocksymbol){
 
 }
 
-/*
-function makeSymbolModal(stockdata){
-$(document).ready(function() {
-    $.ajax({
-        method: 'POST',
-        url: 'viewmodal/',
-        data: {'yourJavaScriptArrayKey': "hello"},
-        success: function (data) {
-             //this gets called when server returns an OK response
-		$( '#results' ).html( data.html );
-        },
-        error: function (data) {
-             alert("it didnt work");
-        }
-    });
-});
-alert("all done. now out here")
-}*/

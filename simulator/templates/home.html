@@ -37,14 +37,14 @@
     
 
     <div class="toright">
-      <form method="post" id="exec" action="{% url 'simulator:market_execution' %}">
+      <form method="post" id="exec" action="">
           {% csrf_token %}
           Quantity:
-          <input type="number" name="quantity" min="1" value="1">
+          <input type="number" id ="quant" name="quantity" min="1" value="1">
           Buy:
-          <input type="radio" name="market" value="buy" checked="checked">
+          <input type="radio" id="radio1" name="market" value="buy">
           Sell:
-          <input type="radio" name="market" value="sell">
+          <input type="radio" id="radio2" name="market" value="sell">
           <button type="submit" name="marketExecution">Go</button>
       </form>
     </div>

@@ -14,16 +14,14 @@ from simulator.forms import UserForm
 from simulator.models import Instrument, Position
 
 
-
-def is_authenticate(request):
-    return request.user.is_authenticated
+def authenticate_view(request):
+    if not request.user.is_authenticated:
+        render(request, 'login.html', status=403)
 
 
 def home(request):
-    if is_authenticate(request):
-        return render(request, 'home.html')
-    else:
-        return HttpResponseRedirect(reverse('simulator:login'))
+    authenticate_view(request)
+    return render('home.html')
 
 
 def getstockdata_views(request):
@@ -110,10 +108,18 @@ def signup(request):
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
+            # username = form.cleaned_data["username"]
+            # email = form.cleaned_data["email"]
+            # if (User.objects.filter(username=username).count() != 0 or
+            #             User.objects.filter(email=email).count() != 0):
+            #     render(request, 'login.html', status=403, context={
+            #         "error_message": "Your signup was duplicate."
+            #     })
+            #     # This might be wrong. Return more context to illustrate error!
             user = User.objects.create_user(**form.cleaned_data)
             user.save()
             login(request, user)
-            return HttpResponseRedirect("/")
+            return render(request, 'home.html', status=201)
     else:
         form = UserForm()
     return render(request, 'signup.html', {'form': form})
@@ -130,9 +136,11 @@ def profile(request):
     portfolio_value = 0
     for position in positions:
         i = Instrument.objects.get(symbol=position.symbol)
-        updated_price = getQuotes([position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
+        updated_price = getQuotes([position.symbol, 'NASDAQ'])[0][
+            "LastTradePrice"]
         i.update_price(updated_price)
-        portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)
+        portfolio_value = portfolio_value + (
+            position.instrument.current_price * position.quantity_purchased)
     context["portfolio_value"] = portfolio_value
     context["positions"] = positions
     return render(request, 'profile.html', context=context)
@@ -143,7 +151,8 @@ def leaderboard(request):
     user_list = []
     context = {}
     for user in users:
-        portfolio_value, net_plus_minus = _update_and_return_user_portfolio_value(user)
+        portfolio_value, net_plus_minus = _update_and_return_user_portfolio_value(
+            user)
         user_struct = {
             "user": user,
             "portfolio_value": portfolio_value,
@@ -163,6 +172,8 @@ def _update_and_return_user_portfolio_value(user):
         updated_price = getQuotes(
             [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
         i.update_price(updated_price)
-        portfolio_value = portfolio_value + (i.current_price * position.quantity_purchased)
-        net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
+        portfolio_value = portfolio_value + (
+            i.current_price * position.quantity_purchased)
+        net_plus_minus = net_plus_minus + (
+                                              i.current_price - position.price_purchased) * position.quantity_purchased
     return portfolio_value, net_plus_minus

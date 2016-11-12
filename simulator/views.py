@@ -14,8 +14,6 @@ from simulator.forms import UserForm
 from simulator.models import Instrument, Position
 
 
-CURRENT_STOCK_MODAL = ""
-
 
 def is_authenticate(request):
     return request.user.is_authenticated
@@ -31,8 +29,6 @@ def home(request):
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
     p = json.dumps(getQuotes(query_str))
-    global CURRENT_STOCK_MODAL
-    CURRENT_STOCK_MODAL = json.loads(p)[0]
     return HttpResponse(p, content_type="application/json")
 
 
@@ -47,13 +43,12 @@ def loggedin(request):
         else:
             return HttpResponseRedirect(reverse('simulator:login'))
 
-
 def market_execution(request):
     user = request.user
-    symbol = CURRENT_STOCK_MODAL["StockSymbol"]
-    quantity = request.POST["quantity"]
-    execution = request.POST["market"]
-    last_trade_price = CURRENT_STOCK_MODAL["LastTradePrice"]
+    symbol = request.GET.get('symbol')
+    quantity = request.GET.get('quantity')
+    execution = request.GET.get('execution')
+    last_trade_price = request.GET.get('price')
     ins_set = Instrument.objects.filter(symbol=symbol)
     if ins_set.count() == 0:
         ins = Instrument.objects.create(

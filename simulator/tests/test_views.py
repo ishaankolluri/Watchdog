@@ -109,103 +109,6 @@ class UITests(TestCase):
         # Test that the JSON returned has a trade price.
         self.assertIn("LastTradePrice", json_response)
 
-    def test_market_execution(self):
-        # Note that market_execution is dependent on getting stock data.
-        self.client.login(username="ishaankolluri", password="watchdog")
-        request = self.factory.get(reverse('simulator:getstockdata_views'), {
-            "query": "PIH"
-        })
-        request.user = self.user
-        response = views.getstockdata_views(request)
-        self.assertEqual(response.status_code, 200)
-        # The view controller should be tracking the right instrument.
-        current_quantity = Position.objects.get(
-            user=self.user,
-            symbol="PIH",
-        ).quantity_purchased
-        self.assertEqual("PIH", views.CURRENT_STOCK_MODAL["StockSymbol"])
-        request = self.factory.post(reverse('simulator:market_execution'), {
-            "quantity": "5",
-            "market": "buy",
-        })
-        request.user = self.user
-        # Adjust unit testing for Django message bug.
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-        response = views.market_execution(request)
-        executed_buy_quantity = Position.objects.get(
-            user=self.user,
-            symbol="PIH",
-        ).quantity_purchased
-        # The market should have successfully made a buy.
-        self.assertEqual(current_quantity + 5, executed_buy_quantity)
-        # The URL should have redirected (302) to the home URL successfully.
-        self.assertEqual(response.status_code, 302)
-
-        # Perform the same operation test for a market sell.
-        request = self.factory.post(reverse('simulator:market_execution'), {
-            "quantity": "5",
-            "market": "sell",
-        })
-        request.user = self.user
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-        current_quantity = Position.objects.get(
-            user=self.user,
-            symbol="PIH",
-        ).quantity_purchased
-        response = views.market_execution(request)
-        executed_sell_quantity = Position.objects.get(
-            user=self.user,
-            symbol="PIH",
-        ).quantity_purchased
-        self.assertEqual(current_quantity - 5, executed_sell_quantity)
-        self.assertEqual(response.status_code, 302)
-
-        # Attempt and fail a market sell on a stock you don't own.
-        request = self.factory.get(reverse('simulator:getstockdata_views'), {
-            "query": "AVHI"
-        })
-        request.user = self.user
-        views.getstockdata_views(request)
-        self.assertEqual("AVHI", views.CURRENT_STOCK_MODAL["StockSymbol"])
-        request = self.factory.post(reverse('simulator:market_execution'), {
-            "quantity": "5",
-            "market": "sell",
-        })
-        request.user = self.user
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-        views.market_execution(request)
-        new_ins = Instrument.objects.get(symbol="AVHI")
-        self.assertIsNotNone(new_ins)
-        new_pos_list = Position.objects.filter(
-            instrument=new_ins, user=self.user)
-        self.assertEquals(new_pos_list.count(), 0)
-
-        # Perform a market buy on a brand new stock - MSFT.
-        request = self.factory.get(reverse('simulator:getstockdata_views'), {
-            "query": "MSFT"
-        })
-        request.user = self.user
-        views.getstockdata_views(request)
-        self.assertEqual("MSFT", views.CURRENT_STOCK_MODAL["StockSymbol"])
-        request = self.factory.post(reverse('simulator:market_execution'), {
-            "quantity": "5",
-            "market": "buy",
-        })
-        request.user = self.user
-        setattr(request, 'session', 'session')
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-        views.market_execution(request)
-        new_ins = Instrument.objects.get(symbol="MSFT")
-        self.assertIsNotNone(new_ins)
-        new_pos = Position.objects.get(instrument=new_ins)
-        self.assertIsNotNone(new_pos)
 
     def test_leaderboard(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -234,3 +137,156 @@ class UITests(TestCase):
         self.assertIn(
             "<td>2</td>\n                    "
             "<td>test_user</td>\n", response.content)
+
+'''
+A new class has been built for testing the following cases:
+
+1. When a stock is already owned and user wants to buy more
+2. When a user wants to buy a brand new stock
+3. When a user wants to sell an existing stock
+4. When a user tries to sell a stock not already owned by them
+
+'''
+
+
+
+class MarketExecutionTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="ishaankolluri",
+            email="isk2108@columbia.edu",
+            password="watchdog",
+        )
+        self.user.save()
+        self.instrument = Instrument.objects.create(
+            symbol="PIH",
+            current_price=Decimal(50.00),
+            last_time_updated=datetime.now(),
+        )
+        self.instrument.save()
+        self.position = Position.objects.create(
+            user=self.user,
+            instrument=self.instrument,
+            symbol="PIH",
+            price_purchased=Decimal(45.00),
+            quantity_purchased=2,
+            date_purchased=datetime.now(),
+        )
+        self.client = Client()
+        self.factory = RequestFactory()
+    
+
+    def test_market_execution_old_buy(self):
+        # Note that market_execution is dependent on getting stock data.
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "PIH"
+        })
+        request.user = self.user
+        response = views.getstockdata_views(request)
+        self.assertEqual(response.status_code, 200)
+        # The view controller should be tracking the right instrument.
+        current_quantity = Position.objects.get(
+            user=self.user,
+            symbol="PIH",
+        ).quantity_purchased
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "PIH",
+            "price": "59.02",
+            "quantity": "5",
+            "execution": "buy",
+
+        })
+        request.user = self.user
+        # Adjust unit testing for Django message bug.
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        response = views.market_execution(request)
+        executed_buy_quantity = Position.objects.get(
+            user=self.user,
+            symbol="PIH",
+        ).quantity_purchased
+        # The market should have successfully made a buy.
+        self.assertEqual(current_quantity + 5, executed_buy_quantity)
+        # The URL should have redirected (302) to the home URL successfully.
+        self.assertEqual(response.status_code, 302)
+
+
+    
+    def test_market_execution_new_buy(self):    
+        self.client.login(username="ishaankolluri", password="watchdog")
+        # Perform a market buy on a brand new stock - MSFT.
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "MSFT"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "MSFT",
+            "price": "59.02",
+            "quantity": "5",
+            "execution": "buy",
+        })
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        views.market_execution(request)
+        new_ins = Instrument.objects.get(symbol="MSFT")
+        self.assertIsNotNone(new_ins)
+        new_pos = Position.objects.get(instrument=new_ins)
+        self.assertIsNotNone(new_pos)
+
+
+
+    def market_execution_owned_sell(self):    
+        self.client.login(username="ishaankolluri", password="watchdog")
+        # Perform the same operation test for a market sell.
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "PIH",
+            "price": "59.02",
+            "quantity": "5",
+            "execution": "sell",
+        })
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        current_quantity = Position.objects.get(
+            user=self.user,
+            symbol="PIH",
+        ).quantity_purchased
+        response = views.market_execution(request)
+        executed_sell_quantity = Position.objects.get(
+            user=self.user,
+            symbol="PIH",
+        ).quantity_purchased
+        self.assertEqual(current_quantity - 5, executed_sell_quantity)
+        self.assertEqual(response.status_code, 302)
+
+
+    def market_execution_NOT_owned_sell(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        # Attempt and fail a market sell on a stock you don't own.
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "AVHI",
+            "price": "59.02",
+            "quantity": "5",
+            "execution": "sell",
+        })
+        request.user = self.user
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+        views.market_execution(request)
+        new_ins = Instrument.objects.get(symbol="AVHI")
+        self.assertIsNotNone(new_ins)
+        new_pos_list = Position.objects.filter(
+            instrument=new_ins, user=self.user)
+        self.assertEquals(new_pos_list.count(), 0)

@@ -51,10 +51,12 @@
   </div>
 </div>
 <div class="outerMarketStatus">
-    {% if messages %}
-        {% for message in messages %}
-            <p class="innerMarketStatus">{{ message }}</p>
-        {% endfor %}
+    <!-- TODO: See the TODO in market_execution in views.py -->
+    {% if message %}
+    {{ message }}
+    {% endif %}
+    {% if not message %}
+    Hi
     {% endif %}
 </div>
   <p id="demo"></p>

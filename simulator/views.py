@@ -50,6 +50,8 @@ def market_execution(request):
     quantity = request.GET.get('quantity')
     execution = request.GET.get('execution')
     last_trade_price = request.GET.get('price')
+    success = True
+    message = ""
     ins_set = Instrument.objects.filter(symbol=symbol)
     if ins_set.count() == 0:
         ins = Instrument.objects.create(
@@ -70,32 +72,39 @@ def market_execution(request):
                 quantity_purchased=quantity,
                 date_purchased=datetime.datetime.now(),
             )
+            message = "You have placed a market buy."
         else:
             # Selling a stock you don't own.
-            messages.success(
-                request, "You cannot sell a stock you do not own.")
+            success = False
+            message = "You have placed a market sell."
     else:
         pos = Position.objects.get(user=user, instrument=ins)
         if execution == "buy":
             if pos.market_buy(quantity):
-                messages.success(
-                    request, "You have placed a market buy.")
+                message = "You have placed a market buy."
             else:
-                messages.success(
-                    request,
+                success = False
+                message = (
                     "Your market buy wasn't processed. "
                     "Please buy less than 500 stocks at a time.")
         if execution == "sell":
             if pos.market_sell(quantity):
                 if pos.quantity_purchased == 0:
                     pos.delete()
-                messages.success(request, "You have placed a market sell.")
+
+                message = "You have placed a market sell."
             else:
-                messages.success(
-                    request,
+                success = False
+                message = (
                     'Please do not attempt to sell more '
                     'than you currently own of this stock.')
-    return HttpResponseRedirect(reverse("simulator:home"))
+    status_code = 200 if success else 400
+    if message:
+        print type(message)
+        print "Rec"
+    # TODO: Figure out why message isn't being recognized in home.html.
+    return render(
+        request, 'home.html', {"message": message}, status=status_code)
 
 
 def login_req(request):

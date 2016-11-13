@@ -1,22 +1,21 @@
 {% extends 'login_base.html' %}
 
 {% block content %}
-    {% if form.errors %}
+{% if form.errors %}
 
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
 {% if next %}
-    {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 
 <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
     {% else %}
 
 <p>Please login to see this page.</p>
-    {% endif %}
 {% endif %}
-
+{% endif %}
 
 <div class="loginForm">
     <form action="{% url 'simulator:loggedin' %}" method="post">
@@ -48,6 +47,10 @@
     <a href="/signup"><button class="submission" value="Register">Register</button></a>
     <br>
     <a href="">Forgot your password?</a>
+    <br>
+    {% if error_message %}<p style="color:red;">{{ error_message }}</p>{% endif %}
 </div>
+
+
 
 {% endblock %}

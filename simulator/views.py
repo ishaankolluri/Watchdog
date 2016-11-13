@@ -16,12 +16,12 @@ from simulator.models import Instrument, Position
 
 def authenticate_view(request):
     if not request.user.is_authenticated:
-        render(request, 'login.html', status=403)
+        return render(request, 'login.html', status=403)
 
 
 def home(request):
     authenticate_view(request)
-    return render('home.html')
+    return render(request, 'home.html')
 
 
 def getstockdata_views(request):
@@ -39,7 +39,10 @@ def loggedin(request):
             login(request, user)
             return HttpResponseRedirect("/")
         else:
-            return HttpResponseRedirect(reverse('simulator:login'))
+            return render(request, 'login.html', status=403, context={
+                "error_message": "Invalid login.",
+            })
+
 
 def market_execution(request):
     user = request.user
@@ -115,7 +118,6 @@ def signup(request):
             #     render(request, 'login.html', status=403, context={
             #         "error_message": "Your signup was duplicate."
             #     })
-            #     # This might be wrong. Return more context to illustrate error!
             user = User.objects.create_user(**form.cleaned_data)
             user.save()
             login(request, user)
@@ -130,6 +132,7 @@ def signedup(request):
 
 
 def profile(request):
+    authenticate_view(request)
     user = request.user
     context = {"user": user}
     positions = Position.objects.filter(user=request.user)
@@ -147,6 +150,7 @@ def profile(request):
 
 
 def leaderboard(request):
+    authenticate_view(request)
     users = User.objects.all()
     user_list = []
     context = {}
@@ -174,6 +178,5 @@ def _update_and_return_user_portfolio_value(user):
         i.update_price(updated_price)
         portfolio_value = portfolio_value + (
             i.current_price * position.quantity_purchased)
-        net_plus_minus = net_plus_minus + (
-                                              i.current_price - position.price_purchased) * position.quantity_purchased
+        net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
     return portfolio_value, net_plus_minus

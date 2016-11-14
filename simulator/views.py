@@ -1,18 +1,20 @@
 import datetime
 from decimal import Decimal
 import json
-
 from googlefinance import getQuotes
-
+import pandas as pd
+from pandas_datareader import data as web
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
-
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
-
+import time
 
 
 def is_authenticate(request):
@@ -28,7 +30,20 @@ def home(request):
 
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
-    p = json.dumps(getQuotes(query_str))
+    mydict = []
+    mydict.append(getQuotes(query_str)[0])
+    lookuptimestamp = time.time()
+    mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
+    p = json.dumps(mydict)
+    plt.rcParams['axes.facecolor'] = '#33cc33'
+    end = datetime.datetime.now()
+    start = datetime.datetime(end.year-1,end.month,end.day)
+    df = web.DataReader(query_str, "yahoo", start, end)
+    plots = df[['Close']].plot(subplots=True, figsize=(10, 10), color='#3333ff', linewidth = 1.5)
+    plt.grid()
+    plt.title(query_str)
+    filename = "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".jpg"
+    plt.savefig(filename)
     return HttpResponse(p, content_type="application/json")
 
 

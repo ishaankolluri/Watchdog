@@ -5,10 +5,8 @@
   {% load static %}
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>Stock WatchDog</title>
-  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_modal.css' %}">  
-  
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_modal.css' %}">
   <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_home.css' %}">
-  
   <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/stock_company-autocomplete.js' %}"></script>
@@ -50,15 +48,7 @@
     </div>
   </div>
 </div>
-<div class="outerMarketStatus">
-    <!-- TODO: See the TODO in market_execution in views.py -->
-    {% if message %}
-    {{ message }}
-    {% endif %}
-    {% if not message %}
-    Hi
-    {% endif %}
-</div>
+<!--<input type="button" id="marketStatus" value="Pending Trade">-->
   <p id="demo"></p>
   <div id="w">
     <div id="content">

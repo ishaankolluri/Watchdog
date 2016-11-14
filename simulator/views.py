@@ -45,6 +45,7 @@ def loggedin(request):
 
 
 def market_execution(request):
+    authenticate_view(request)
     user = request.user
     symbol = request.GET.get('symbol')
     quantity = request.GET.get('quantity')
@@ -91,20 +92,19 @@ def market_execution(request):
             if pos.market_sell(quantity):
                 if pos.quantity_purchased == 0:
                     pos.delete()
-
                 message = "You have placed a market sell."
             else:
                 success = False
                 message = (
                     'Please do not attempt to sell more '
                     'than you currently own of this stock.')
-    status_code = 200 if success else 400
-    if message:
-        print type(message)
-        print "Rec"
+    code = 200 if success else 400
     # TODO: Figure out why message isn't being recognized in home.html.
-    return render(
-        request, 'home.html', {"message": message}, status=status_code)
+    context_list = json.dumps([message])
+    # print context_list
+    return HttpResponse(context_list, content_type="application/json")
+    # response.status_code = code
+    # return render(request, 'home.html', context=context, status=status_code)
 
 
 def login_req(request):

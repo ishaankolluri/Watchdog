@@ -1,9 +1,9 @@
 $(function(){
   var stock_companies = [
-	//data=symbol, value=name. Avoid changing these variable names for now as they are linked with autocomplete.js file 
+	//data=symbol, value=name. Avoid changing these variable names for now as they are linked with autocomplete.js file
         //We can add more (data,value) later
         // Also, we can later store the following json data in our DB and load it from there- Dhruv
-	
+
 	{"data": "PIH", "value": "1347 Property Insurance Holdings, Inc."},
 	{"data": "FLWS", "value": "1-800 FLOWERS.COM, Inc."},
 	{"data": "FCCY", "value": "1st Constitution Bancorp (NJ)"},
@@ -6701,9 +6701,9 @@ $(function(){
 	{"data": "XTNT", "value": "Xtant Medical Holdings, Inc."},
 	{"data": "YUMA", "value": "Yuma Energy, Inc."},
 	{"data": "ZDGE", "value": "Zedge, Inc."},
-    
+
   ];
-  
+
   // setup autocomplete function pulling from stock_companies[] array
   $('#autocomplete').autocomplete({
     lookup: stock_companies,
@@ -6713,57 +6713,49 @@ $(function(){
 
     }
   });
-  
+
 
 });
 
 function getstockdata(stocksymbol){
-
  $.getJSON("getstockdata_views", {query: stocksymbol})
     .done(function(data){
-
        document.getElementById("hit2").value=data[0].StockSymbol;
        document.getElementById("hit3").value=data[0].Index;
        document.getElementById("hit4").value=data[0].LastTradePrice;
        document.getElementById("hit5").value=data[0].LastTradeDateTime;
-	//exec is the form id. When form is submitted do something.
 	$("#exec").submit(function(){
-	//if radio1(buy) is selected then do something
 	if($("#radio1").prop("checked")){
-	
-	//We already have these values as we are inside getstockdata() in JS
-	buydata = {
-		   "symbol" : data[0].StockSymbol, 
-		   "price" : data[0].LastTradePrice, 
-                   "quantity" : document.getElementById("quant").value, 
-		   "execution" : "buy"
+        buydata = {
+               "symbol" : data[0].StockSymbol,
+               "price" : data[0].LastTradePrice,
+               "quantity" : document.getElementById("quant").value,
+               "execution" : "buy"
+        }
+        $.getJSON("market_execution", buydata).done(function(resp){
+            var status = document.createElement("p");
+            var content = document.createTextNode(data[0].StockSymbol);
+            status.appendChild(content);
+            var loc = document.getElementById("demo");
+            document.body.insertBefore(status, loc);
 
-			}	
-	//call market_execution function in the controller and send buydata to it.
-	$.get("market_execution",buydata).done(function(data){
-	//This is a get function which expects to get something. But we return HttpResponseRedirect from market_execution which leads to a page being rendered. Because of this get() never recieves anything. Therefore you will notice a broken pipe message in the terminal. This can be ignored.
-	});	
+
+        });
 	}
-	//If radio2(sell) is selected then do something
 	if($("#radio2").prop("checked")){
-	
-	//only difference is execution tag. This is a hacky way to help our controller know if it was a buy or sell operation on the frontend.
-	//If we plan on splitting market_execution on buy and sell
-	selldata = {"symbol" : data[0].StockSymbol, 
-		   "price" : data[0].LastTradePrice, 
-                   "quantity" : document.getElementById("quant").value, 
-		   "execution" : "sell"
-
-			}	
-
-	$.get("market_execution",selldata).done(function(data){
-
-	});	
-
+        selldata = {
+            "symbol" : data[0].StockSymbol,
+            "price" : data[0].LastTradePrice,
+            "quantity" : document.getElementById("quant").value,
+            "execution" : "sell"
+        }
+        $.getJSON("market_execution",selldata).done(function(resp){
+            document.getElementbyId("marketStatus").value = data[0].StockSymbol;
+        });
 	}
 });
 
-	
+
     })
     .fail(function(error){
         console.log(error);

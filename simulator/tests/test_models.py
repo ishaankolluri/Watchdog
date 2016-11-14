@@ -60,6 +60,12 @@ class PositionTests(TestCase):
         self.assertTrue(success)
         self.assertEqual(
             pre_buy_quantity + 5, self.position.quantity_purchased)
+        buy_quantity = "501"
+        pre_buy_quantity = self.position.quantity_purchased
+        failure = self.position.market_buy(buy_quantity)
+        self.assertFalse(failure)
+        self.assertEqual(
+            pre_buy_quantity, self.position.quantity_purchased)
 
     def test_market_sell(self):
         self.position.quantity_purchased = 9

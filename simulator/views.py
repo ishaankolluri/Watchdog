@@ -1,4 +1,6 @@
 import datetime
+import os
+import glob
 from decimal import Decimal
 import json
 from googlefinance import getQuotes
@@ -44,6 +46,14 @@ def getstockdata_views(request):
     plt.title(query_str)
     filename = "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".jpg"
     plt.savefig(filename)
+    return HttpResponse(p, content_type="application/json")
+
+
+def delete_image(request):
+    print "************************************In delete image*****************************************"
+    for f in glob.glob("simulator/static/stock-graph*"):
+        os.remove(f)
+    p=[1,2,3] # just passing random values to check reception
     return HttpResponse(p, content_type="application/json")
 
 

@@ -6767,9 +6767,11 @@ function getstockdata(stocksymbol){
 	});	
 
 	}
+
+	$.getJSON("delete_image").done(function(data){});
 });
 	document.getElementById("stockgraph").className="dog_gif";
-
+	
 	//change the image back to dog gif for the next stock search
 	$("#stockgraph").attr("src","../static/loading-dog.gif");	
     })

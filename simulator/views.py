@@ -14,18 +14,19 @@ from simulator.forms import UserForm
 from simulator.models import Instrument, Position
 
 
-def authenticate_view(request):
-    if not request.user.is_authenticated:
-        return render(request, "login.html", status=403)
+
+def is_authenticate(request):
+    return request.user.is_authenticated
 
 
 def home(request):
-    authenticate_view(request)
-    return render(request, 'home.html')
+    if is_authenticate(request):
+        return render(request, 'home.html')
+    else:
+        return HttpResponseRedirect(reverse('simulator:login'))
 
 
 def getstockdata_views(request):
-    authenticate_view(request)
     query_str = str(request.GET['query'])
     p = json.dumps(getQuotes(query_str))
     return HttpResponse(p, content_type="application/json")
@@ -40,14 +41,9 @@ def loggedin(request):
             login(request, user)
             return HttpResponseRedirect("/")
         else:
-            return render(request, 'login.html', status=403, context={
-                "error_message": "Invalid login.",
-            })
-
+            return HttpResponseRedirect(reverse('simulator:login'))
 
 def market_execution(request):
-    if request.method == 'POST':
-        return render(request, 'home.html', status=400)
     user = request.user
     symbol = request.GET.get('symbol')
     quantity = request.GET.get('quantity')
@@ -117,7 +113,7 @@ def signup(request):
             user = User.objects.create_user(**form.cleaned_data)
             user.save()
             login(request, user)
-            return render(request, 'home.html', status=201)
+            return HttpResponseRedirect("/")
     else:
         form = UserForm()
     return render(request, 'signup.html', {'form': form})
@@ -128,7 +124,6 @@ def signedup(request):
 
 
 def profile(request):
-    authenticate_view(request)
     user = request.user
     context = {"user": user}
     positions = Position.objects.filter(user=request.user)
@@ -144,7 +139,6 @@ def profile(request):
 
 
 def leaderboard(request):
-    authenticate_view(request)
     users = User.objects.all()
     user_list = []
     context = {}

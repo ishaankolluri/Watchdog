@@ -43,10 +43,7 @@ def loggedin(request):
             login(request, user)
             return HttpResponseRedirect("/")
         else:
-            return render(request, 'login.html', status=403, context={
-                "error_message": "Invalid login.",
-            })
-
+            return HttpResponseRedirect(reverse('simulator:login'))
 
 def market_execution(request):
     if not request.user.is_authenticated:
@@ -123,7 +120,7 @@ def signup(request):
             user = User.objects.create_user(**form.cleaned_data)
             user.save()
             login(request, user)
-            return render(request, 'home.html', status=201)
+            return HttpResponseRedirect("/")
     else:
         form = UserForm()
     return render(request, 'signup.html', {'form': form})

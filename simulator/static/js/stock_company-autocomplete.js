@@ -6762,6 +6762,8 @@ function getstockdata(stocksymbol){
 
 	}
 });
+
+	
     })
     .fail(function(error){
         console.log(error);

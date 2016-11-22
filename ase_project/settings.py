@@ -125,7 +125,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATICFILES_STORGAE = 'whitenoise.django.GzipManifestFilesStorage'
 
-PROJECT_DIR =os.path.dirname(__file__)
+PROJECT_DIR = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'collectstatic')
 
 LOGIN_REDIRECT_URL = '/'

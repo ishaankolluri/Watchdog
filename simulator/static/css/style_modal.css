@@ -78,10 +78,28 @@ p {
 .toright{
 
   position: absolute;
-    bottom: 380px;
+    bottom: 240px;
     right: 480;
     width: 100px;
     height: 50px;
     
 }
+.stock_graph{
 
+  position: absolute;
+    bottom: 228px;
+    right: 300;
+    width: 350px;
+    height:350px;
+    
+}
+
+.dog_gif{
+
+  position: absolute;
+    bottom: 400px;
+    right: 460;
+    width: 65px;
+    height:65px;
+
+}

@@ -67,7 +67,10 @@ def loggedin(request):
         else:
             return HttpResponseRedirect(reverse('simulator:login'))
 
+
 def market_execution(request):
+    message = ""
+    success = True
     if not request.user.is_authenticated:
         return render(request, 'login.html', status=403)
     else:
@@ -98,32 +101,38 @@ def market_execution(request):
                     quantity_purchased=quantity,
                     date_purchased=datetime.datetime.now(),
                 )
+                message = "You have placed a new market buy"
             else:
                 # Selling a stock you don't own.
-                messages.success(
-                    request, "You cannot sell a stock you do not own.")
+                message = "You cannot sell a stock you do not own."
+                success = False
         else:
             pos = Position.objects.get(user=user, instrument=ins)
             if execution == "buy":
                 if pos.market_buy(quantity):
-                    messages.success(
-                        request, "You have placed a market buy.")
+                    message = "You have placed a market buy."
                 else:
-                    messages.success(
-                        request,
-                        "Your market buy wasn't processed. "
-                        "Please buy less than 500 stocks at a time.")
+                    message = "Your market buy wasn't processed. " \
+                        "Please buy less than 500 stocks at a time."
+                    success = False
             if execution == "sell":
                 if pos.market_sell(quantity):
                     if pos.quantity_purchased == 0:
                         pos.delete()
-                    messages.success(request, "You have placed a market sell.")
+                    message = "You have placed a market sell."
                 else:
-                    messages.success(
-                        request,
-                        'Please do not attempt to sell more '
-                        'than you currently own of this stock.')
-        return HttpResponseRedirect(reverse("simulator:home"))
+                    message = 'Please do not attempt to sell more '\
+                        'than you currently own of this stock.'
+                    success = False
+        status_code = 200 if success else 400
+        print "Message: "
+        print message
+        response = {
+            "status": 200,
+            "message": message
+        }
+        return HttpResponse(json.dumps(response), content_type="application/json", status=status_code)
+        # return HttpResponseRedirect(reverse("simulator:home"))
 
 
 def login_req(request):

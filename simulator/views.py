@@ -12,6 +12,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
+from django.contrib.auth.decorators import login_required
+from oauth2_provider.views.generic import ProtectedResourceView
 
 
 CURRENT_STOCK_MODAL = ""
@@ -19,7 +21,6 @@ CURRENT_STOCK_MODAL = ""
 
 def is_authenticate(request):
     return request.user.is_authenticated
-
 
 def home(request):
     if is_authenticate(request):
@@ -97,7 +98,7 @@ def market_execution(request):
                     'than you currently own of this stock.')
     return HttpResponseRedirect(reverse("simulator:home"))
 
-
+# @login_required
 def login_req(request):
     return render(request, 'login.html')
 
@@ -168,3 +169,11 @@ def _update_and_return_user_portfolio_value(user):
         portfolio_value = portfolio_value + (i.current_price * position.quantity_purchased)
         net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
     return portfolio_value, net_plus_minus
+
+class ApiEndpoint(ProtectedResourceView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, OAuth2!')
+
+@login_required()
+def secret_page(request, *args, **kwargs):
+    return HttpResponse('Secret contents!', status=200)

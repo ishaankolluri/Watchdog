@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^market_execution/', views.market_execution,
         name="market_execution"),
     url(r'leaderboard/', views.leaderboard,
-        name="leaderboard")
+        name="leaderboard"),
+    url(r'^secret/$', views.secret_page, name='secret'),
 ]

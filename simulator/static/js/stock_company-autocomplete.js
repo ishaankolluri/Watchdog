@@ -6760,8 +6760,7 @@ function getstockdata(stocksymbol){
 	document.getElementById("stockgraph").className="dog_gif";
 	//change the image back to dog gif for the next stock search
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
-    })
-
+ })
  }).fail(function(error){
     console.log(error);
 });

@@ -37,32 +37,25 @@
     
 
     <div class="toright">
-      <form id="exec">
-          {% csrf_token %}
-          <div class="sameline"><p>Quantity:</p></div>
-          <div class="sameline"><input type="number" id ="quant" name="quantity" min="1" value="1"></div>
-	  <div class="sameline"><p>Buy:</p></div>
-          <div class="sameline"><input type="radio" id="radio1" name="market" value="buy"></div>
-          <div class ="sameline"><p>Sell:</p></div>
-          <div class ="sameline"><input type="radio" id="radio2" name="market" value="sell"></div>
-	<button class= "button" type="submit" name="marketExecution" style="float:right;">Go</button>
-      </form>
+      Quantity:
+      <input type="number" id ="quant" name="quantity" min="1" value="1">
+      Buy:
+      <input type="radio" id="radio1" name="market" value="buy" checked="checked">
+      <br>
+      Sell:
+      <input type="radio" id="radio2" name="market" value="sell">
+      <br>
+      <button class="button" type="submit" id="marketExecution" style="float:righ;t">Go</button>
     </div>
   </div>
 </div>
-<div class="outerMarketStatus">
-    {% if messages %}
-        {% for message in messages %}
-            <p class="innerMarketStatus">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+<div id="outerMarketStatus">
+    <!-- if a trade has been placed, the data message goes here -->
 </div>
   <p id="demo"></p>
   <div id="w">
     <div id="content">
       <h1>Stock Market Company Lookup</h1>
-
-      
       <div id="searchfield">
         <form method="post"><input type="text" name="company" class="biginput" id="autocomplete" method="POST" placeholder="Search a company">
          <a href="#" class="button" id="hit">Search</a>
@@ -99,6 +92,7 @@ span.onclick = function() {
     
 //We need to change the image back to dog gif for the next time the user searches for a stock	
     $("#stockgraph").attr("src","../static/loading-dog.gif");
+    $('#autocomplete').val("");
     modal.style.display = "none";
     
    $.getJSON("delete_image").done(function(data){});
@@ -110,6 +104,7 @@ window.onclick = function(event) {
     if (event.target == modal) {
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
         modal.style.display = "none";
+    $('#autocomplete').val("");
 	$.getJSON("delete_image").done(function(data){});
     }
 }

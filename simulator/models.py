@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from decimal import Decimal 
+from decimal import Decimal
 from django.db import models, transaction
 from django.contrib.auth.models import User
 
@@ -15,7 +15,7 @@ class Instrument(models.Model):
         self.current_price = Decimal(retrieved_price)
         self.save()
 
-    def __str__(self):
+    def __unicode__(self):
         return "Symbol: {} | Current Price: {}".format(
             self.symbol,
             self.current_price,
@@ -53,9 +53,9 @@ class Position(models.Model):
         return self.quantity_purchased * (
             self.instrument.current_price - self.price_purchased)
 
-    def __str__(self):
+    def __unicode__(self):
         return ("Symbol: {} | User: {} | Quantity: {}"
                 " | Price Purchased: {} | Current Price: {}".
                 format(self.symbol, self.user, self.quantity_purchased,
                        self.price_purchased, self.instrument.current_price, )
-                )
+               )

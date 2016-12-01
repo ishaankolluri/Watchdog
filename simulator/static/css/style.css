@@ -135,7 +135,7 @@ p.uppercase {
     width: 75%;
 }
 
-.outerMarketStatus {
+#outerMarketStatus {
     width: 100%;
     text-align: center;
 }

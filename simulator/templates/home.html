@@ -92,6 +92,7 @@ span.onclick = function() {
     
 //We need to change the image back to dog gif for the next time the user searches for a stock	
     $("#stockgraph").attr("src","../static/loading-dog.gif");
+    $('#autocomplete').val("");
     modal.style.display = "none";
     
    $.getJSON("delete_image").done(function(data){});
@@ -103,6 +104,7 @@ window.onclick = function(event) {
     if (event.target == modal) {
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
         modal.style.display = "none";
+    $('#autocomplete').val("");
 	$.getJSON("delete_image").done(function(data){});
     }
 }

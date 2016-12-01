@@ -43,16 +43,15 @@ def getstockdata_views(request):
     plots = df[['Close']].plot(subplots=True, figsize=(10, 10), color='#3333ff', linewidth = 1.5)
     plt.grid()
     plt.title(query_str)
-    filename = "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".jpg"
+    filename = "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".png"
     plt.savefig(filename)
     return HttpResponse(p, content_type="application/json")
 
 
 def delete_image(request):
-    print "************************************In delete image*****************************************"
     for f in glob.glob("simulator/static/stock-graph*"):
         os.remove(f)
-    p=[1,2,3] # just passing random values to check reception
+    p = [] # just passing random values to check reception
     return HttpResponse(p, content_type="application/json")
 
 

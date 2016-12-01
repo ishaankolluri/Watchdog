@@ -29,6 +29,8 @@ def home(request):
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
     mydict = [getQuotes(query_str)[0]]
+    if not mydict:
+        HttpResponseRedirect(reverse('simulator:home'))
     lookuptimestamp = time.time()
     mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
     p = json.dumps(mydict)

@@ -1,26 +1,24 @@
 import datetime
-import os
-import glob
-from decimal import Decimal
 import json
+import os
+import time
+import glob
+
 from googlefinance import getQuotes
-import pandas as pd
-from pandas_datareader import data as web
-import matplotlib
-matplotlib.use('Agg')
 from matplotlib import pyplot as plt
-from django.contrib import messages
+from pandas_datareader import data as web
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
+
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
-import time
 
-# def authenticate_view(request):
-#     if not request.user.is_authenticated:
-#         return render(request, "login.html", status=403)
+import matplotlib
+matplotlib.use('Agg')
+
 
 def home(request):
     if not request.user.is_authenticated:
@@ -31,19 +29,20 @@ def home(request):
 
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
-    mydict = []
-    mydict.append(getQuotes(query_str)[0])
+    mydict = [getQuotes(query_str)[0]]
     lookuptimestamp = time.time()
     mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
     p = json.dumps(mydict)
     plt.rcParams['axes.facecolor'] = '#33cc33'
     end = datetime.datetime.now()
-    start = datetime.datetime(end.year-1,end.month,end.day)
+    start = datetime.datetime(end.year - 1, end.month, end.day)
     df = web.DataReader(query_str, "yahoo", start, end)
-    plots = df[['Close']].plot(subplots=True, figsize=(10, 10), color='#3333ff', linewidth = 1.5)
+    df[['Close']].plot(
+        subplots=True, figsize=(10, 10), color='#3333ff', linewidth=1.5)
     plt.grid()
     plt.title(query_str)
-    filename = "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".png"
+    filename = \
+        "simulator/static/" + "stock-graph" + str(lookuptimestamp) + ".png"
     plt.savefig(filename)
     return HttpResponse(p, content_type="application/json")
 
@@ -51,7 +50,7 @@ def getstockdata_views(request):
 def delete_image(request):
     for f in glob.glob("simulator/static/stock-graph*"):
         os.remove(f)
-    p = [] # just passing random values to check reception
+    p = []  # just passing random values to check reception
     return HttpResponse(p, content_type="application/json")
 
 
@@ -112,7 +111,7 @@ def market_execution(request):
                     message = "You have placed a market buy."
                 else:
                     message = "Your market buy wasn't processed. " \
-                        "Please buy less than 500 stocks at a time."
+                              "Please buy less than 500 stocks at a time."
                     success = False
             if execution == "sell":
                 if pos.market_sell(quantity):
@@ -120,8 +119,8 @@ def market_execution(request):
                         pos.delete()
                     message = "You have placed a market sell."
                 else:
-                    message = 'Please do not attempt to sell more '\
-                        'than you currently own of this stock.'
+                    message = 'Please do not attempt to sell more ' \
+                              'than you currently own of this stock.'
                     success = False
         status_code = 200 if success else 400
         print "Message: "
@@ -130,8 +129,10 @@ def market_execution(request):
             "status": 200,
             "message": message
         }
-        return HttpResponse(json.dumps(response), content_type="application/json", status=status_code)
-        # return HttpResponseRedirect(reverse("simulator:home"))
+        return HttpResponse(
+            json.dumps(response),
+            content_type="application/json",
+            status=status_code)
 
 
 def login_req(request):
@@ -170,9 +171,12 @@ def profile(request):
         portfolio_value = 0
         for position in positions:
             i = Instrument.objects.get(symbol=position.symbol)
-            updated_price = getQuotes([position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
+            updated_price = getQuotes(
+                [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
             i.update_price(updated_price)
-            portfolio_value = portfolio_value + (position.instrument.current_price * position.quantity_purchased)
+            portfolio_value = portfolio_value + \
+                              (position.instrument.current_price *
+                               position.quantity_purchased)
         context["portfolio_value"] = portfolio_value
         context["positions"] = positions
         return render(request, 'profile.html', context=context)
@@ -186,14 +190,16 @@ def leaderboard(request):
         user_list = []
         context = {}
         for user in users:
-            portfolio_value, net_plus_minus = _update_and_return_user_portfolio_value(user)
+            portfolio_value, net_plus_minus = \
+                _update_and_return_user_portfolio_value(user)
             user_struct = {
                 "user": user,
                 "portfolio_value": portfolio_value,
                 "net_plus_minus": net_plus_minus,
             }
             user_list.append(user_struct)
-        user_list = sorted(user_list, key=lambda k: k['portfolio_value'], reverse=True)
+        user_list = sorted(user_list,
+                           key=lambda k: k['portfolio_value'], reverse=True)
         context["users"] = user_list
         return render(request, 'leaderboard.html', context=context)
 
@@ -207,6 +213,10 @@ def _update_and_return_user_portfolio_value(user):
         updated_price = getQuotes(
             [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
         i.update_price(updated_price)
-        portfolio_value = portfolio_value + (i.current_price * position.quantity_purchased)
-        net_plus_minus = net_plus_minus + (i.current_price - position.price_purchased) * position.quantity_purchased
+        portfolio_value = portfolio_value + \
+                          (i.current_price * position.quantity_purchased)
+        net_plus_minus = \
+            net_plus_minus + \
+            (i.current_price - position.price_purchased) \
+            * position.quantity_purchased
     return portfolio_value, net_plus_minus

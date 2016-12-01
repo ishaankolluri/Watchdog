@@ -1,0 +1,152 @@
+************* Module simulator.views
+C: 41, 0: Exactly one space required after comma
+    start = datetime.datetime(end.year-1,end.month,end.day)
+                                        ^ (bad-whitespace)
+C: 41, 0: Exactly one space required after comma
+    start = datetime.datetime(end.year-1,end.month,end.day)
+                                                  ^ (bad-whitespace)
+C: 43, 0: No space allowed around keyword argument assignment
+    plots = df[['Close']].plot(subplots=True, figsize=(10, 10), color='#3333ff', linewidth = 1.5)
+                                                                                           ^ (bad-whitespace)
+C: 11, 0: Import "from matplotlib import pyplot as plt" should be placed at the top of the module (wrong-import-position)
+C: 12, 0: Import "from django.contrib import messages" should be placed at the top of the module (wrong-import-position)
+C: 13, 0: Import "from django.contrib.auth import authenticate, login, logout" should be placed at the top of the module (wrong-import-position)
+C: 14, 0: Import "from django.contrib.auth.models import User" should be placed at the top of the module (wrong-import-position)
+C: 15, 0: Import "from django.shortcuts import render, reverse" should be placed at the top of the module (wrong-import-position)
+C: 16, 0: Import "from django.http import HttpResponse, HttpResponseRedirect" should be placed at the top of the module (wrong-import-position)
+C: 17, 0: Import "from simulator.forms import UserForm" should be placed at the top of the module (wrong-import-position)
+C: 18, 0: Import "from simulator.models import Instrument, Position" should be placed at the top of the module (wrong-import-position)
+C: 19, 0: Import "import time" should be placed at the top of the module (wrong-import-position)
+W: 43, 4: Unused variable 'plots' (unused-variable)
+E: 83,18: Class 'Instrument' has no 'objects' member (no-member)
+E: 85,18: Class 'Instrument' has no 'objects' member (no-member)
+E: 91,18: Class 'Instrument' has no 'objects' member (no-member)
+E: 92,19: Class 'Position' has no 'objects' member (no-member)
+E: 95,16: Class 'Position' has no 'objects' member (no-member)
+E:109,18: Class 'Position' has no 'objects' member (no-member)
+R: 70, 0: Too many branches (16/12) (too-many-branches)
+E:169,20: Class 'Position' has no 'objects' member (no-member)
+E:172,16: Class 'Instrument' has no 'objects' member (no-member)
+E:202,16: Class 'Position' has no 'objects' member (no-member)
+W:  4, 0: Unused Decimal imported from decimal (unused-import)
+W:  7, 0: Unused pandas imported as pd (unused-import)
+W: 12, 0: Unused messages imported from django.contrib (unused-import)
+C: 19, 0: standard import "import time" comes before "from googlefinance import getQuotes" (wrong-import-order)
+
+
+Report
+======
+151 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|method   |0      |0          |=          |0           |0        |
++---------+-------+-----------+-----------+------------+---------+
+|function |12     |12         |=          |8.33        |8.33     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    django 
+      \-contrib 
+      | \-auth (simulator.views)
+      | | \-models (simulator.views)
+      | \-messages (simulator.views)
+      \-http (simulator.views)
+      \-shortcuts (simulator.views)
+    googlefinance (simulator.views)
+    matplotlib (simulator.views)
+      \-pyplot (simulator.views)
+    pandas (simulator.views)
+    simulator 
+      \-forms (simulator.views)
+      \-models (simulator.views)
+
+
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |177    |83.10 |187      |-10.00     |
++----------+-------+------+---------+-----------+
+|docstring |7      |3.29  |8        |-1.00      |
++----------+-------+------+---------+-----------+
+|comment   |5      |2.35  |1        |+4.00      |
++----------+-------+------+---------+-----------+
+|empty     |24     |11.27 |28       |-4.00      |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |=          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |13     |13       |=          |
++-----------+-------+---------+-----------+
+|refactor   |1      |1        |=          |
++-----------+-------+---------+-----------+
+|warning    |4      |1        |+3.00      |
++-----------+-------+---------+-----------+
+|error      |9      |9        |=          |
++-----------+-------+---------+-----------+
+
+
+
+Messages
+--------
+
++----------------------+------------+
+|message id            |occurrences |
++======================+============+
+|wrong-import-position |9           |
++----------------------+------------+
+|no-member             |9           |
++----------------------+------------+
+|unused-import         |3           |
++----------------------+------------+
+|bad-whitespace        |3           |
++----------------------+------------+
+|wrong-import-order    |1           |
++----------------------+------------+
+|unused-variable       |1           |
++----------------------+------------+
+|too-many-branches     |1           |
++----------------------+------------+
+
+
+
+Global evaluation
+-----------------
+Your code has been rated at 5.83/10 (previous run: 5.95/10, -0.12)
+

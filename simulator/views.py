@@ -3,6 +3,8 @@ import json
 import os
 import time
 import glob
+import matplotlib
+matplotlib.use('Agg')
 
 from googlefinance import getQuotes
 from matplotlib import pyplot as plt
@@ -15,9 +17,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from simulator.forms import UserForm
 from simulator.models import Instrument, Position
-
-import matplotlib
-matplotlib.use('Agg')
 
 
 def home(request):

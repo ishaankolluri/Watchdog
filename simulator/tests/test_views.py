@@ -39,12 +39,8 @@ class UITests(TestCase):
 
     def test_secure_page(self):
         # Test that the user cannot access restricted pages without logging in.
-        with self.assertRaises(TypeError) as context:
-            # Note 'profile' is a page that requires authentication.
-            self.client.get(reverse('simulator:profile'))
-        self.assertIn(
-            "\'AnonymousUser\' object is not iterable",
-            context.exception.message)
+        response = self.client.get(reverse('simulator:profile'))
+        self.assertIn("loginForm", response.content)
         # Now log in the user - this should return a valid response.
         self.client.login(username="ishaankolluri", password="watchdog")
         response = self.client.get(reverse('simulator:profile'))
@@ -108,7 +104,6 @@ class UITests(TestCase):
         json_response = json.loads(response.content)[0]
         # Test that the JSON returned has a trade price.
         self.assertIn("LastTradePrice", json_response)
-
 
     def test_leaderboard(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -174,7 +169,6 @@ class MarketExecutionTests(TestCase):
         )
         self.client = Client()
         self.factory = RequestFactory()
-    
 
     def test_market_execution_old_buy(self):
         # Note that market_execution is dependent on getting stock data.
@@ -209,8 +203,7 @@ class MarketExecutionTests(TestCase):
         ).quantity_purchased
         # The market should have successfully made a buy.
         self.assertEqual(current_quantity + 5, executed_buy_quantity)
-        # The URL should have redirected (302) to the home URL successfully.
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 
     

@@ -198,7 +198,7 @@ def leaderboard(request):
             }
             user_list.append(user_struct)
         user_list = sorted(user_list,
-                           key=lambda k: k['portfolio_value'], reverse=True)
+                           key=lambda k: k['net_plus_minus'], reverse=True)
         context["users"] = user_list
         return render(request, 'leaderboard.html', context=context)
 

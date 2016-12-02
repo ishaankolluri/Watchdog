@@ -29,6 +29,8 @@ def home(request):
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
     mydict = [getQuotes(query_str)[0]]
+    if not mydict:
+        HttpResponseRedirect(reverse('simulator:home'))
     lookuptimestamp = time.time()
     mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
     p = json.dumps(mydict)
@@ -90,15 +92,19 @@ def market_execution(request):
         pos_list = Position.objects.filter(user=user, instrument=ins)
         if pos_list.count() == 0:
             if execution == "buy":
-                Position.objects.create(
-                    user=user,
-                    instrument=ins,
-                    symbol=symbol,
-                    price_purchased=last_trade_price,
-                    quantity_purchased=quantity,
-                    date_purchased=datetime.datetime.now(),
-                )
-                message = "You have placed a new market buy"
+                if quantity > 500:
+                    success = False
+                    message = "Please buy less than 500 stocks at a time."
+                else:
+                    Position.objects.create(
+                        user=user,
+                        instrument=ins,
+                        symbol=symbol,
+                        price_purchased=last_trade_price,
+                        quantity_purchased=quantity,
+                        date_purchased=datetime.datetime.now(),
+                    )
+                    message = "You have placed a new market buy"
             else:
                 # Selling a stock you don't own.
                 message = "You cannot sell a stock you do not own."

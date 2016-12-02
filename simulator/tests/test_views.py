@@ -112,7 +112,9 @@ class UITests(TestCase):
             print("Stock Graph created.........................OK")
         else:
             raise Exception("Stock Graph not created")
-
+        #Now delete the graph. Test for deletion implemented towards the end
+        request_delete = ""
+        views.delete_image(request_delete)
         # Test the non-UI view has returned a valid response.
         self.assertEqual(response.status_code, 200)
         
@@ -214,6 +216,9 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         response = views.getstockdata_views(request)
+        #Delete stock graph
+        request_delete = ""
+        views.delete_image(request_delete)
         self.assertEqual(response.status_code, 200)
         # The view controller should be tracking the right instrument.
         current_quantity = Position.objects.get(
@@ -252,6 +257,8 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         views.getstockdata_views(request)
+        request_delete = ""
+        views.delete_image(request_delete)
         request = self.factory.get(reverse('simulator:market_execution'), {
             "symbol": "MSFT",
             "price": "59.02",
@@ -306,6 +313,8 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         views.getstockdata_views(request)
+        request_delete = ""
+        views.delete_image(request_delete)
         request = self.factory.get(reverse('simulator:market_execution'), {
             "symbol": "AVHI",
             "price": "59.02",

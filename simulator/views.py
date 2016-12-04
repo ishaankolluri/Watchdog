@@ -6,6 +6,7 @@ import glob
 import matplotlib
 matplotlib.use('Agg')
 
+from decimal import Decimal
 from googlefinance import getQuotes
 from matplotlib import pyplot as plt
 from pandas_datareader import data as web
@@ -92,7 +93,7 @@ def market_execution(request):
         pos_list = Position.objects.filter(user=user, instrument=ins)
         if pos_list.count() == 0:
             if execution == "buy":
-                if quantity > 500:
+                if Decimal(quantity) > 500:
                     success = False
                     message = "Please buy less than 500 stocks at a time."
                 else:

@@ -6708,9 +6708,11 @@ $(function(){
   $('#autocomplete').autocomplete({
     lookup: stock_companies,
     onSelect: function (suggestion) {
+    console.log("b4");
 	document.getElementById("hit1").value=suggestion.value;
 	document.getElementById("hiddendiv").innerHTML="autocomplete";
 	getstockdata(suggestion.data);
+	console.log("after");
 
     }
   });
@@ -6749,6 +6751,7 @@ function getstockdata(stocksymbol){
 	        $('#myModal').hide();
 	        $('#autocomplete').val("");
 	        $('#outerMarketStatus').text(data.message);
+	        $("#marketExecution").unbind("click");
 
 	    }).error(function(data){
 	        console.log(data);
@@ -6756,6 +6759,7 @@ function getstockdata(stocksymbol){
 	        $('#autocomplete').val("");
 	        console.log(data.responseText);
 	        $('#outerMarketStatus').text(JSON.parse(data.responseText).message);
+	        $("#marketExecution").unbind("click");
 	    });
 	    $.getJSON("delete_image").done(function(data){});
 	});
@@ -6766,4 +6770,5 @@ function getstockdata(stocksymbol){
  }).fail(function(error){
     console.log(error);
 });
+console.log("all done");
 }

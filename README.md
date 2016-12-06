@@ -10,7 +10,7 @@ Its end goal is to offer basic buy/sell features, limited information on stocks,
 
 `Django 1.10`
 
-See the `requirements.txt` file for what is installed in the virtualenv.
+See the `requirements.txt` file for what is installed in the virtualenv. Use the script `./update.sh` to download the dependencies after you activate the virtual environment(see Setup).
 
 ## Setup
 Clone the repository. Then, `cd` into the parent directory. To enter the virtual environment, run `source ase/bin/activate`
@@ -21,7 +21,7 @@ Next, run `./manage.py runserver` to start the application.
 ## Development and Testing
 Refer to the exceptionally detailed [Django documentation](https://docs.djangoproject.com/) for most questions.
 
-We will be following PEP8 standards. We will use `flake8` to lint our application.
+We will be following PEP8 standards. We will use `flake8` and `pylint` to lint and statically analzye our application.
 
-To test, we will use `mock` and `case` to simulate function calls and make comparative assertions.
-
+###Testing & Continuous Integration
+To locally run our tests, we use `./manage.py test`. If you want to run tests with coverage, running our custom script `./test_coverage` will run tests, generate a coverage directory(gitignored) and open `index.html`, which displays a comprehensive code report.

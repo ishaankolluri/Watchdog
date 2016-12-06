@@ -29,7 +29,6 @@ pytz==2016.7
 six==1.10.0
 South==1.0.2
 stevedore==1.17.1
-vboxapi==1.0
 virtualenv==15.0.3
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.2

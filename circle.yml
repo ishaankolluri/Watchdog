@@ -2,10 +2,6 @@ dependencies:
  pre:
     - pip install -r requirements.txt
 
-test:
-  pre:
-    - ./manage.py collectstatic --no-input`
-
 general:
   branches:
     only:

@@ -7,6 +7,7 @@ a {
 }
 body {
     font-family: Raleway, sans-serif;
+    margin: 0px;
 }
 
 
@@ -27,13 +28,13 @@ input {
     height: 48px;
     text-align: center;
     display: table;
-    box-shadow: 1px 1px 1px #888888;
+    /*box-shadow: 1px 1px 1px #888888;*/
 }
 
 p.uppercase {
-    text-transform: uppercase;
-
- font-weight: 10;
+  text-transform: uppercase;
+  
+  font-weight: 10;
   font-size: 0.8em;
   line-height: 1.5em;
   margin-bottom: 5px;
@@ -44,7 +45,20 @@ p.uppercase {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #CCFFCC;
+}
+
+.nav p.name {
+    padding-left: 20px;
+    float: left;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.nav ul {
+    float: right;
 }
 
 .nav li {
@@ -53,14 +67,20 @@ p.uppercase {
 
 .nav li a {
     display: block;
-    color: #CCFFCC;
+    color: black;
     text-align: center;
     padding: 14px 50px;
     text-decoration: none;
 }
-
+.nav li .row {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 0px 14px 0px 14px;
+  text-decoration: none;
+}
 .nav li a:hover {
-    background-color: #111;
+    background-color: grey;
 }
 
 .navMidHeader {
@@ -68,6 +88,19 @@ p.uppercase {
     display: table-cell;
     vertical-align: middle;
 }
+
+.nav > ul > li.subNav ul {
+  display: none;
+  /*position: absolute;*/
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+}
+.nav ul li.subNav:hover ul {
+  display: block;
+}
+
+
 
 
 /* Login Pages CSS */
@@ -114,12 +147,15 @@ p.uppercase {
     font-size: 15px;
     font-family: Dosis;
     -webkit-box-shadow: none;
-    /* TODO: Remove Shadow. */
     box-shadow: none;
     background-color: #CCFFCC;
     border-radius: 6px;
     position: absolute;
     right: 10px;
+}
+.row {
+    height: 48px;
+    padding: 0px 0px 0px;
 }
 
 /* User Profile CSS */

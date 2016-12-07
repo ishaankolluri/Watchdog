@@ -37,27 +37,27 @@ html { height: 101%; }
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
   color: #ccc !important;
-  font-style: italic;  
+  font-style: italic;
 }
 
-br { display: block; line-height: 2.2em; } 
+br { display: block; line-height: 2.2em; }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, section { display: block; }
 ol { list-style: none; }
 
-textarea { 
+textarea {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  outline: none; 
+  outline: none;
 }
 
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
-strong { font-weight: bold; } 
+strong { font-weight: bold; }
 
 table { border-collapse: collapse; border-spacing: 0; }
 img { border: 0; max-width: 100%; }
@@ -105,11 +105,11 @@ h1:after {
   vertical-align: middle;
   background: #f0f0f0;
 }
-h1:before {    
+h1:before {
   left: -.5em;
   margin: 0 0 0 -50%;
 }
-h1:after {    
+h1:after {
   left: .5em;
   margin: 0 -50% 0 0;
 }
@@ -120,8 +120,8 @@ h1 > span {
 }
 
 p {
- font-weight: 10;
-    font-family: Raleway, sans-serif;
+  font-weight: 10;
+  font-family: Raleway, sans-serif;
   display: block;
   font-size: 0.8em;
   line-height: 1.5em;
@@ -146,7 +146,7 @@ a:hover { text-decoration: underline; }
   text-align:right;
   width: 100%;
   background: #fff;
-  padding: 25px 20px;
+  padding: 100px 20px;
   padding-bottom: 35px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
   -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
@@ -229,5 +229,3 @@ a:hover { text-decoration: underline; }
 .autocomplete-suggestion { padding: 10px 5px; font-size: 1.2em; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #f0f0f0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399ff; }
-
-

@@ -59,14 +59,13 @@ li.subNav {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white;
-    padding-left: 30px;
+    background-color: #CCFFCC;
+    /*padding-left: 30px;*/
 }
 
 .subNav:hover .dropdown-content{
     display: block;
 }
-
 .nav ul {
     list-style-type: none;
     margin: 0;
@@ -106,10 +105,10 @@ li.subNav {
   text-decoration: none;
 }
 .nav li a:hover {
-    background-color: grey;
+    background-color: #b7b7b7;
 }
 .nav li .dropdown-content a:hover {
-    background-color: white;
+    background-color: #b7b7b7;
 }
 .navMidHeader {
     font-size: 30px;

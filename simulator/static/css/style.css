@@ -22,27 +22,56 @@ input {
 .nav {
     width: 100%;
     background-color: #CCFFCC;
-    height: 48px;
+    height: 47px;
     text-align: center;
     display: table;
     /*box-shadow: 1px 1px 1px #888888;*/
 }
 
 p.uppercase {
-  text-transform: uppercase;
+    text-transform: uppercase;
 
-  font-weight: 10;
-  font-size: 0.8em;
-  line-height: 1.5em;
-  margin-bottom: 5px;
-  letter-spacing: 2px;
+    font-weight: 10;
+    font-size: 0.8em;
+    line-height: 1.5em;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
 }
-.nav ul {
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #CCFFCC;
+    height: 47px;
+}
+
+li a, .dropbtn {
+    display:inline-block;
+    color: white;
+    text-align: center;
+}
+
+li.subNav {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding-left: 30px;
+}
+
+.subNav:hover .dropdown-content{
+    display: block;
+}
+
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 .nav p.name {
@@ -50,7 +79,7 @@ p.uppercase {
     float: left;
     font-size: 20px;
     margin-top: 10px;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     font-weight: bold;
 }
 
@@ -79,22 +108,13 @@ p.uppercase {
 .nav li a:hover {
     background-color: grey;
 }
-
+.nav li .dropdown-content a:hover {
+    background-color: white;
+}
 .navMidHeader {
     font-size: 30px;
     display: table-cell;
     vertical-align: middle;
-}
-
-.nav > ul > li.subNav ul {
-  display: none;
-  /*position: absolute;*/
-  top: 100%;
-  left: 0;
-  white-space: nowrap;
-}
-.nav ul li.subNav:hover ul {
-  display: block;
 }
 
 
@@ -159,7 +179,7 @@ p.uppercase {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 40px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -167,6 +187,8 @@ p.uppercase {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .modalinfobuttons{
@@ -197,6 +219,7 @@ p.uppercase {
     padding: 20px;
     border: 1px solid #888;
     width: 60%;
+    overflow: hidden;
 }
 
 .modal-content form {
@@ -220,62 +243,72 @@ p.uppercase {
 }
 
 .sameline{
-display: inline-block;
+    display: inline-block;
 }
 
-/*p {
-        color: #424242;
-        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
-  letter-spacing:0.1em;
-  line-height: 200%;
-  font-size: 24pt;
-  font-variant: small-caps;
-        }*/
-
-.toright{
-
-  position: absolute;
-    bottom: 240px;
-    right: 480;
-    width: 100px;
-    height: 50px;
-
+.toright .purchase{
+    margin-top: -35px;
+    width: 325px;
 }
+.toright p {
+    color: #424242;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    letter-spacing:0.1em;
+    line-height: 200%;
+    font-size: 10pt;
+    font-variant: small-caps;
+    display: inline-block
+}
+
+.toleft{
+    float:left;
+    padding-right: 15px;
+    padding-top: 30px;
+}
+
+.toright {
+    overflow: hidden;
+}
+
 .stock_graph{
-
-  position: absolute;
+    /*position: absolute;*/
+    /*clip: rect(300px,100px,100px,100px);*/
     bottom: 228px;
     right: 300;
-    width: 350px;
+    width: 325px;
     height:350px;
-
+    margin-left: -20px;
+    margin-bottom: -15px;
 }
 
 .dog_gif{
-
-  position: absolute;
-    bottom: 400px;
-    right: 460;
-    width: 65px;
-    height:65px;
-
+    /*position: absolute;*/
+    bottom: 228px;
+    right: 300;
+    width: 325px;
+    height:350px;
+    border: 0;
+    max-width: 100%;
 }
 
 
 /* User Profile CSS */
 #userBasicInfo {
-    border: 1px solid #CCFFCC;
+    /*border: 1px solid #CCFFCC;*/
+    border-bottom: 1px solid #CCFFCC;
+    border-right: 1px solid #CCFFCC;
     float: left;
     width: 20%;
 }
 
 #userStockTable {
-    border: 1px solid #CCFFCC;
-    float: right;
-    width: 75%;
+    /*border: 1px solid #CCFFCC;*/
+    overflow: hidden;
+    width: auto;
+
 }
 
-.outerMarketStatus {
+#outerMarketStatus {
     width: 100%;
     text-align: center;
 }
@@ -291,14 +324,13 @@ display: inline-block;
 
 .leaderboardTable{
     align: center;
-    border: 1px solid #CCFFCC;
 }
 
 
 /* Style_Home CSS */
 /** resets **/
 @import url(http://fonts.googleapis.com/css?family=Raleway);
- h1{
+h1{
     font-family: Raleway, sans-serif;
   margin: 0;
   padding: 0;
@@ -358,7 +390,7 @@ blockquote:before, blockquote:after, q:before, q:after { content: ''; content: n
 strong { font-weight: bold; }
 
 table { border-collapse: collapse; border-spacing: 0; }
-img { border: 0; max-width: 100%; }
+/*.toright img { border: 0; max-width: 100%; }*/
 
 #topbar {
   background: #4f4a41;
@@ -425,6 +457,22 @@ p {
   line-height: 1.5em;
   margin-bottom: 5px;
 }
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: grey;
+    color: white;
+}
 
 a { color: #5a9352; text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -444,8 +492,11 @@ a:hover { text-decoration: underline; }
   text-align:right;
   width: 100%;
   background: #fff;
-  padding: 100px 20px;
+  padding-top: 100px;
   padding-bottom: 35px;
+  width: auto;
+  padding-left: 20px;
+  padding-right: 20px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
   -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;

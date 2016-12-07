@@ -1,4 +1,6 @@
 import json
+import os
+import glob
 from datetime import datetime
 from decimal import Decimal
 
@@ -39,27 +41,26 @@ class UITests(TestCase):
 
     def test_secure_page(self):
         # Test that the user cannot access restricted pages without logging in.
-        with self.assertRaises(TypeError) as context:
-            # Note 'profile' is a page that requires authentication.
-            self.client.get(reverse('simulator:profile'))
-        self.assertIn(
-            "\'AnonymousUser\' object is not iterable",
-            context.exception.message)
+        response = self.client.get(reverse('simulator:profile'))
+        self.assertIn("loginForm", response.content)
         # Now log in the user - this should return a valid response.
         self.client.login(username="ishaankolluri", password="watchdog")
         response = self.client.get(reverse('simulator:profile'))
         # Our username should be displayed on all restricted views.
         self.assertIn("ishaankolluri", response.content)
+        print("Secure Page view.............................OK")
 
     def test_login_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
         # If this works, we can check the context of the view.
         response = self.client.get(reverse('simulator:login'))
         self.assertIn("loginForm", response.content)
+        print("Login view.............................OK")
 
     def test_signup_view(self):
         response = self.client.get(reverse('simulator:signup'))
         self.assertIn("Sign Up", response.content)
+        print("Signup view.............................OK")
 
     def test_profile_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -90,11 +91,13 @@ class UITests(TestCase):
         response = self.client.get(reverse('simulator:profile'))
         # MSFT is the only stock that should have a quantity of 5.
         self.assertIn("<td>5</td>", response.content)
+        print("Profile view.............................OK")
 
     def test_home_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
         response = self.client.get(reverse('simulator:home'))
         self.assertIn("Stock Market Company Lookup", response.content)
+        print("Home view.............................OK")
 
     def test_getstockdata_views(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -103,12 +106,22 @@ class UITests(TestCase):
         })
         request.user = self.user
         response = views.getstockdata_views(request)
+        # Test if the graph was created for the stock
+        timestamp = str(json.loads(response.content)[0]['LookupTimestamp'])
+        if(os.path.exists("simulator/static/stock-graph" + timestamp + ".png")):
+            print("Stock Graph created.........................OK")
+        else:
+            raise Exception("Stock Graph not created")
+        #Now delete the graph. Test for deletion implemented towards the end
+        request_delete = ""
+        views.delete_image(request_delete)
         # Test the non-UI view has returned a valid response.
         self.assertEqual(response.status_code, 200)
+        
         json_response = json.loads(response.content)[0]
         # Test that the JSON returned has a trade price.
         self.assertIn("LastTradePrice", json_response)
-
+        print("GetStockData view.............................OK")
 
     def test_leaderboard(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -137,6 +150,26 @@ class UITests(TestCase):
         self.assertIn(
             "<td>2</td>\n                    "
             "<td>test_user</td>\n", response.content)
+        print("Leaderboard view.............................OK")
+
+
+    def test_delete_image(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request_create = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "PIH"
+        })
+        request_create.user = self.user
+        views.getstockdata_views(request_create)
+        request_delete = ""
+        response = views.delete_image(request_delete)
+        if not glob.glob("simulator/static/stock-graph*"):
+            print "Stock Graph deleted............................OK"
+        else:
+            raise Exception("Stock Graph not deleted")
+        print("Delete Graph view.............................OK")
+        
+
+        
 
 '''
 A new class has been built for testing the following cases:
@@ -174,7 +207,6 @@ class MarketExecutionTests(TestCase):
         )
         self.client = Client()
         self.factory = RequestFactory()
-    
 
     def test_market_execution_old_buy(self):
         # Note that market_execution is dependent on getting stock data.
@@ -184,6 +216,9 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         response = views.getstockdata_views(request)
+        #Delete stock graph
+        request_delete = ""
+        views.delete_image(request_delete)
         self.assertEqual(response.status_code, 200)
         # The view controller should be tracking the right instrument.
         current_quantity = Position.objects.get(
@@ -209,8 +244,8 @@ class MarketExecutionTests(TestCase):
         ).quantity_purchased
         # The market should have successfully made a buy.
         self.assertEqual(current_quantity + 5, executed_buy_quantity)
-        # The URL should have redirected (302) to the home URL successfully.
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
+        print("MarketExecution OldBuy view...................OK")
 
 
     
@@ -222,6 +257,8 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         views.getstockdata_views(request)
+        request_delete = ""
+        views.delete_image(request_delete)
         request = self.factory.get(reverse('simulator:market_execution'), {
             "symbol": "MSFT",
             "price": "59.02",
@@ -237,6 +274,7 @@ class MarketExecutionTests(TestCase):
         self.assertIsNotNone(new_ins)
         new_pos = Position.objects.get(instrument=new_ins)
         self.assertIsNotNone(new_pos)
+        print("MarketExecution NewBuy view................OK")
 
 
 
@@ -264,6 +302,7 @@ class MarketExecutionTests(TestCase):
         ).quantity_purchased
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
+        print("MarketExecution OwnedSell view.............................OK")
 
 
     def market_execution_NOT_owned_sell(self):
@@ -274,6 +313,8 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         views.getstockdata_views(request)
+        request_delete = ""
+        views.delete_image(request_delete)
         request = self.factory.get(reverse('simulator:market_execution'), {
             "symbol": "AVHI",
             "price": "59.02",
@@ -290,3 +331,4 @@ class MarketExecutionTests(TestCase):
         new_pos_list = Position.objects.filter(
             instrument=new_ins, user=self.user)
         self.assertEquals(new_pos_list.count(), 0)
+        print("MarketExecution NotOwnedSell view.............................OK")

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_nose',
+    'django_crontab',
 ]
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -121,7 +122,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-# TODO: This should be turned on later as a nice-to-have.
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -129,3 +129,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
+
+CRONJOBS = [
+    ('*/15 * * * *', 'simulator.cron.update_instruments')
+]

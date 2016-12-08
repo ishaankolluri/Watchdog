@@ -13,6 +13,7 @@ class Instrument(models.Model):
     @transaction.atomic
     def update_price(self, retrieved_price):
         self.current_price = Decimal(retrieved_price)
+        print "New price: " + str(self.current_price)
         self.save()
 
     def __unicode__(self):

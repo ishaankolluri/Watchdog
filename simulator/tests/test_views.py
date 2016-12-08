@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 
 from ..models import Position, Instrument
 from .. import views
+from ..forms import *
 
 
 class UITests(TestCase):
@@ -50,6 +51,19 @@ class UITests(TestCase):
         self.assertIn("ishaankolluri", response.content)
         print("Secure Page view.............................OK")
 
+    def test_home_not_auth(self):
+        response = self.client.get(reverse('simulator:home'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_market_not_auth(self):
+        response = self.client.get(reverse('simulator:market_execution'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_market_not_get_request(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        response = self.client.post(reverse('simulator:market_execution'))
+        self.assertEqual(response.status_code, 400)
+
     def test_login_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
         # If this works, we can check the context of the view.
@@ -57,10 +71,43 @@ class UITests(TestCase):
         self.assertIn("loginForm", response.content)
         print("Login view.............................OK")
 
+    def test_logout_view(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        response = self.client.get(reverse('simulator:logout'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_legal_logged_in_view(self):
+        data = {
+            "username": "ishaankolluri",
+            "email": "ishaankolluri@gmail.com",
+            "password": "watchdog",
+        }
+        response = self.client.post(reverse('simulator:loggedin'), data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_illegal_logged_in_view(self):
+        data = {
+            "username": "fake",
+            "email": "nonexistent@gmail.com",
+            "password": "watchCAT",
+        }
+        response = self.client.post(reverse('simulator:loggedin'), data)
+        self.assertIn(response.content, "Login")
+
     def test_signup_view(self):
         response = self.client.get(reverse('simulator:signup'))
         self.assertIn("Sign Up", response.content)
         print("Signup view.............................OK")
+
+    def test_confirm_signup_view(self):
+        data = {
+            "username": "user",
+            "first_name": "user",
+            "email": "user@gmail.com",
+            "password": "user",
+        }
+        response = self.client.post(reverse('simulator:signup'), data)
+        self.assertEqual(response.status_code, 302)
 
     def test_profile_view(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -167,20 +214,6 @@ class UITests(TestCase):
         else:
             raise Exception("Stock Graph not deleted")
         print("Delete Graph view.............................OK")
-        
-
-        
-
-'''
-A new class has been built for testing the following cases:
-
-1. When a stock is already owned and user wants to buy more
-2. When a user wants to buy a brand new stock
-3. When a user wants to sell an existing stock
-4. When a user tries to sell a stock not already owned by them
-
-'''
-
 
 
 class MarketExecutionTests(TestCase):
@@ -216,7 +249,7 @@ class MarketExecutionTests(TestCase):
         })
         request.user = self.user
         response = views.getstockdata_views(request)
-        #Delete stock graph
+        # Delete stock graph
         request_delete = ""
         views.delete_image(request_delete)
         self.assertEqual(response.status_code, 200)
@@ -246,8 +279,6 @@ class MarketExecutionTests(TestCase):
         self.assertEqual(current_quantity + 5, executed_buy_quantity)
         self.assertEqual(response.status_code, 200)
         print("MarketExecution OldBuy view...................OK")
-
-
     
     def test_market_execution_new_buy(self):    
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -276,8 +307,6 @@ class MarketExecutionTests(TestCase):
         self.assertIsNotNone(new_pos)
         print("MarketExecution NewBuy view................OK")
 
-
-
     def market_execution_owned_sell(self):    
         self.client.login(username="ishaankolluri", password="watchdog")
         # Perform the same operation test for a market sell.
@@ -303,7 +332,6 @@ class MarketExecutionTests(TestCase):
         self.assertEqual(current_quantity - 5, executed_sell_quantity)
         self.assertEqual(response.status_code, 302)
         print("MarketExecution OwnedSell view.............................OK")
-
 
     def market_execution_NOT_owned_sell(self):
         self.client.login(username="ishaankolluri", password="watchdog")
@@ -332,3 +360,61 @@ class MarketExecutionTests(TestCase):
             instrument=new_ins, user=self.user)
         self.assertEquals(new_pos_list.count(), 0)
         print("MarketExecution NotOwnedSell view.............................OK")
+
+    def test_initial_buy_500(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "AVHI",
+            "price": "59.02",
+            "quantity": "501",
+            "execution": "buy",
+        })
+        request.user = self.user
+        response = views.market_execution(request)
+        self.assertIn(json.loads(response.content)["message"],
+                      "Please buy less than 500 stocks at a time.")
+
+    def test_illegal_sell(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "AVHI",
+            "price": "59.02",
+            "quantity": "501",
+            "execution": "sell",
+        })
+        request.user = self.user
+        response = views.market_execution(request)
+        self.assertIn(json.loads(response.content)["message"],
+                      "You cannot sell a stock you do not own.")
+
+    def test_full_position_sell(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "PIH",
+            "price": "45.00",
+            "quantity": "2",
+            "execution": "sell",
+        })
+        self.assertEqual(2, Position.objects.get(
+            user=self.user, symbol="PIH").quantity_purchased)
+        request.user = self.user
+        response = views.market_execution(request)
+        self.assertIn(json.loads(response.content)["message"],
+                      "You have placed a market sell.")
+        pos_list = Position.objects.filter(user=self.user, symbol="PIH")
+        self.assertEqual(pos_list.count(), 0)

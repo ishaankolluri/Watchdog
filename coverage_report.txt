@@ -1,4 +1,4 @@
-................
+..........................
 Name                                   Stmts   Miss  Cover
 ----------------------------------------------------------
 simulator.py                               0      0   100%
@@ -9,13 +9,13 @@ simulator/migrations/0001_initial.py       8      0   100%
 simulator/migrations.py                    0      0   100%
 simulator/models.py                       36     21    42%
 simulator/urls.py                          4      0   100%
-simulator/views.py                       153     34    78%
+simulator/views.py                       153      2    99%
 ----------------------------------------------------------
-TOTAL                                    220     60    73%
+TOTAL                                    220     28    87%
 ----------------------------------------------------------------------
-Ran 16 tests in 5.973s
+Ran 26 tests in 10.313s
 
 OK
-nosetests --with-coverage --cover-package=simulator --with-coverage --verbosity=1
+nosetests --with-coverage --cover-package=simulator --verbosity=1
 Creating test database for alias 'default'...
 Destroying test database for alias 'default'...

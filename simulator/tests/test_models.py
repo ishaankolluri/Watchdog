@@ -27,7 +27,7 @@ class InstrumentTests(TestCase):
 
     def test_str(self):
         serial_str = "Symbol: PIH | Current Price: 50"
-        self.assertEqual(serial_str, self.ins.__str__())
+        self.assertEqual(serial_str, self.ins.__unicode__())
         print("Str1 model.............................OK")
 
 
@@ -102,5 +102,5 @@ class PositionTests(TestCase):
         self.position.instrument.current_price = Decimal(50.00)
         serial_str = "Symbol: PIH | User: ishaankolluri | Quantity: 2 |" \
                      " Price Purchased: 45 | Current Price: 50"
-        self.assertEqual(serial_str, self.position.__str__())
+        self.assertEqual(serial_str, self.position.__unicode__())
         print("Str2 model.............................OK")

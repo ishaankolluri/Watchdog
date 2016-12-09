@@ -15,6 +15,8 @@
 </head>
 
 <body>
+<!-- Hacky fix for searching without stock name issue -->
+<div id="hiddendiv" style="display:none">not_autocomplete</div>
               <!-- The Modal -->
 
 <div id="myModal" class="modal">
@@ -73,24 +75,37 @@ var span = document.getElementsByClassName("close")[0];
 // When the user clicks the button, open the modal
 btn.onclick = function() {
 	//As matplotlib takes arounds 1-2 secs for creating the image, we wait for 3 secs before finally loading it.
-
+if(document.getElementById("hiddendiv").innerHTML=="autocomplete"){
       setTimeout(function () {
 
 		//We use different classes for stockgraph and dog gif which helps differentiate their css content.
-		document.getElementById("stockgraph").className="stock_graph";
 		var aa = document.getElementById("stockgraph").getAttribute("data-original");
 		document.getElementById("stockgraph").setAttribute("src", aa);
-		    }, 3000);
+		//This timeout is to make sure that only after the image is set to graph will its size increase. Or else earlier
+		//the dog gif was increasing to the size of our graph.
+		setTimeout(function () {
+			document.getElementById("stockgraph").className="stock_graph";
+		    }, 10);			
+		
 
+		    }, 3000);
+     		
      modal.style.display = "block";
  
-
 }
+}
+
+
+
+
+
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     
 //We need to change the image back to dog gif for the next time the user searches for a stock	
+    document.getElementById("stockgraph").className="dog_gif";
+    document.getElementById("hiddendiv").innerHTML="not_autocomplete";
     $("#stockgraph").attr("src","../static/loading-dog.gif");
     $('#autocomplete').val("");
     modal.style.display = "none";
@@ -102,6 +117,8 @@ span.onclick = function() {
 window.onclick = function(event) {
     
     if (event.target == modal) {
+        document.getElementById("stockgraph").className="dog_gif";
+        document.getElementById("hiddendiv").innerHTML="not_autocomplete";
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
         modal.style.display = "none";
     $('#autocomplete').val("");

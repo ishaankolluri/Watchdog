@@ -23,10 +23,12 @@ class InstrumentTests(TestCase):
         updated_price = 70.00
         self.ins.update_price(updated_price)
         self.assertEqual(Decimal(70.00), self.ins.current_price)
+        print("UpdatePrice model.............................OK")
 
     def test_str(self):
         serial_str = "Symbol: PIH | Current Price: 50"
-        self.assertEqual(serial_str, self.ins.__str__())
+        self.assertEqual(serial_str, self.ins.__unicode__())
+        print("Str1 model.............................OK")
 
 
 class PositionTests(TestCase):
@@ -66,6 +68,7 @@ class PositionTests(TestCase):
         self.assertFalse(failure)
         self.assertEqual(
             pre_buy_quantity, self.position.quantity_purchased)
+        print("Market Buy model.............................OK")
 
     def test_market_sell(self):
         self.position.quantity_purchased = 9
@@ -85,11 +88,13 @@ class PositionTests(TestCase):
         self.assertFalse(failure)
         self.assertEqual(
             pre_sell_quantity, self.position.quantity_purchased)
+        print("Market Sell model.............................OK")
 
     def test_net_profit(self):
         known_profit = self.position.quantity_purchased * (
             self.instrument.current_price - self.position.price_purchased)
         self.assertEqual(known_profit, self.position.net_profit)
+        print("Net Profit model.............................OK")
 
     def test_str(self):
         self.position.quantity_purchased = 2
@@ -97,4 +102,5 @@ class PositionTests(TestCase):
         self.position.instrument.current_price = Decimal(50.00)
         serial_str = "Symbol: PIH | User: ishaankolluri | Quantity: 2 |" \
                      " Price Purchased: 45 | Current Price: 50"
-        self.assertEqual(serial_str, self.position.__str__())
+        self.assertEqual(serial_str, self.position.__unicode__())
+        print("Str2 model.............................OK")

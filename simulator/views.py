@@ -6,6 +6,7 @@ import glob
 import matplotlib
 matplotlib.use('Agg')
 
+from decimal import Decimal
 from googlefinance import getQuotes
 from matplotlib import pyplot as plt
 from pandas_datareader import data as web
@@ -29,6 +30,8 @@ def home(request):
 def getstockdata_views(request):
     query_str = str(request.GET['query'])
     mydict = [getQuotes(query_str)[0]]
+    if not mydict:
+        HttpResponseRedirect(reverse('simulator:home'))
     lookuptimestamp = time.time()
     mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
     p = json.dumps(mydict)
@@ -89,17 +92,23 @@ def market_execution(request):
             ins = Instrument.objects.get(symbol=symbol)
         pos_list = Position.objects.filter(user=user, instrument=ins)
         if pos_list.count() == 0:
+            print "Pos count is 0."
             if execution == "buy":
-                Position.objects.create(
-                    user=user,
-                    instrument=ins,
-                    symbol=symbol,
-                    price_purchased=last_trade_price,
-                    quantity_purchased=quantity,
-                    date_purchased=datetime.datetime.now(),
-                )
-                message = "You have placed a new market buy"
+                if Decimal(quantity) > 500:
+                    success = False
+                    message = "Please buy less than 500 stocks at a time."
+                else:
+                    Position.objects.create(
+                        user=user,
+                        instrument=ins,
+                        symbol=symbol,
+                        price_purchased=last_trade_price,
+                        quantity_purchased=quantity,
+                        date_purchased=datetime.datetime.now(),
+                    )
+                    message = "You have placed a new market buy"
             else:
+                print "Reached where I want to be."
                 # Selling a stock you don't own.
                 message = "You cannot sell a stock you do not own."
                 success = False
@@ -122,8 +131,6 @@ def market_execution(request):
                               'than you currently own of this stock.'
                     success = False
         status_code = 200 if success else 400
-        print "Message: "
-        print message
         response = {
             "status": 200,
             "message": message

@@ -6709,8 +6709,8 @@ $(function(){
     lookup: stock_companies,
     onSelect: function (suggestion) {
 	document.getElementById("hit1").value=suggestion.value;
+	document.getElementById("hiddendiv").innerHTML="autocomplete";
 	getstockdata(suggestion.data);
-
     }
   });
 });
@@ -6730,6 +6730,7 @@ function getstockdata(stocksymbol){
 
 	// When the button is clicked, extract the input data.
 	$('#marketExecution').click(function(){
+           document.getElementById("hiddendiv").innerHTML="not_autocomplete";
 	    var tradeType = "";
 	    if($("#radio1").prop('checked')){
 	        tradeType = "buy";
@@ -6743,22 +6744,23 @@ function getstockdata(stocksymbol){
 	        "execution": tradeType
 	    }
 	    $.get('market_execution', marketData).success(function(data){
-	        console.log(data);
 	        $('#myModal').hide();
 	        $('#autocomplete').val("");
 	        $('#outerMarketStatus').text(data.message);
+	        $("#marketExecution").unbind("click");
 
 	    }).error(function(data){
-	        console.log(data);
 	        $('#myModal').hide();
 	        $('#autocomplete').val("");
 	        console.log(data.responseText);
 	        $('#outerMarketStatus').text(JSON.parse(data.responseText).message);
+	        $("#marketExecution").unbind("click");
 	    });
 	    $.getJSON("delete_image").done(function(data){});
 	});
-	document.getElementById("stockgraph").className="dog_gif";
+
 	//change the image back to dog gif for the next stock search
+        document.getElementById("stockgraph").className="dog_gif";
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
  }).fail(function(error){
     console.log(error);

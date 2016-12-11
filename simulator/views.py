@@ -94,7 +94,10 @@ def market_execution(request):
         if pos_list.count() == 0:
             print "Pos count is 0."
             if execution == "buy":
-                if Decimal(quantity) > 500:
+                if Decimal(quantity) <= 0:
+                    success = False
+                    message = "Quantity must be greater than 0."
+                elif Decimal(quantity) > 500:
                     success = False
                     message = "Please buy less than 500 stocks at a time."
                 else:
@@ -115,14 +118,20 @@ def market_execution(request):
         else:
             pos = Position.objects.get(user=user, instrument=ins)
             if execution == "buy":
-                if pos.market_buy(quantity):
+                if Decimal(quantity) <= 0:
+                    success = False
+                    message = "Quantity must be greater than 0."
+                elif pos.market_buy(quantity):
                     message = "You have placed a market buy."
                 else:
                     message = "Your market buy wasn't processed. " \
                               "Please buy less than 500 stocks at a time."
                     success = False
             if execution == "sell":
-                if pos.market_sell(quantity):
+                if Decimal(quantity) <= 0:
+                    success = False
+                    message = "Quantity must be greater than 0."
+                elif pos.market_sell(quantity):
                     if pos.quantity_purchased == 0:
                         pos.delete()
                     message = "You have placed a market sell."

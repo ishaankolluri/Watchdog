@@ -5,25 +5,33 @@
 <body>
     {% block navbar %}
     <div class="nav">
+        <p class="name">WatchDog</p>
         <ul>
-            <li><a href="{% url 'simulator:home' %}">Home</a></li>
-            <li><a href="{% url 'simulator:profile' %}">Profile</a></li>
-            <li><a href="{% url 'simulator:leaderboard' %}">Leaderboard</a></li>
+            <li><a href="{% url 'simulator:home' %}"><img src="/static/pictures/home.jpg" alt="Home" style="width:20px;height:20px;"></a></li>
+            <li><a href="{% url 'simulator:profile' %}"><img src="/static/pictures/profile.jpg" alt="Profile" style="width:20px;height:20px;"></a></li>
+            <li><a href="{% url 'simulator:leaderboard' %}"><img src="/static/pictures/leaderboard.jpg" alt="Leaderboard" style="width:20px;height:20px;"></a></li>
+            <li class="subNav">
+                <a href="#" class="dropbtn">{{ request.user.get_username }} <span class="arrow">&#9660;</span></a>
+                <div class="dropdown-content">
+                  <a href="{% url 'simulator:logout' %}" method="post">
+                    {% csrf_token %}
+                    <!-- <button class="logout">Logout</button> -->
+                    <class="logout">Logout</button>
+                  </a>
+                </div>
+            </li>
+            <!-- <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn">Dropdown</a>
+              <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+              </div>
+            </li> -->
         </ul>
-        <p class="uppercase">Welcome {{ request.user.get_username }}</p>
+        <!-- <p class="uppercase">Welcome {{ request.user.get_username }}</p> -->
     </div>
     {% endblock %}
-    <div>
-        <div class="row">
-            <div>
-                <!-- <a href="/login"><button class="logout" value="Login">Logout</button></a> -->
-                <form action="{% url 'simulator:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button class="logout">Logout</button>
-                </form>
-                <h1>{% block page_name %}{% endblock %}</h1>
-            </div>
-        </div>
-    </div>
+
     {% block content %}{% endblock %}
 </body>

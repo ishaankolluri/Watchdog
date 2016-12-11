@@ -379,6 +379,42 @@ class MarketExecutionTests(TestCase):
         self.assertIn(json.loads(response.content)["message"],
                       "Please buy less than 500 stocks at a time.")
 
+    def test_initial_buy_negative_input(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "AVHI",
+            "price": "59.02",
+            "quantity": "-10",
+            "execution": "buy",
+        })
+        request.user = self.user
+        response = views.market_execution(request)
+        self.assertIn(json.loads(response.content)["message"],
+                      "Quantity must be greater than 0.")
+
+    def test_initial_sell_negative_input(self):
+        self.client.login(username="ishaankolluri", password="watchdog")
+        request = self.factory.get(reverse('simulator:getstockdata_views'), {
+            "query": "AVHI"
+        })
+        request.user = self.user
+        views.getstockdata_views(request)
+        request = self.factory.get(reverse('simulator:market_execution'), {
+            "symbol": "PIH",
+            "price": "59.02",
+            "quantity": "-5",
+            "execution": "sell",
+        })
+        request.user = self.user
+        response = views.market_execution(request)
+        self.assertIn(json.loads(response.content)["message"],
+                      "Quantity must be greater than 0.")
+
     def test_illegal_sell(self):
         self.client.login(username="ishaankolluri", password="watchdog")
         request = self.factory.get(reverse('simulator:getstockdata_views'), {

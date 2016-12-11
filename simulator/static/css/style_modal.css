@@ -1,0 +1,105 @@
+.modalinfobuttons{
+    background-color: #79bbff; /* Blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+}
+
+.modal-content form {
+    font-color: white;
+    text-align: center;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sameline{
+display: inline-block;
+}
+
+p {
+        color: #424242;
+        font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+  letter-spacing:0.1em;
+  line-height: 200%;
+  font-size: 24pt;
+  font-variant: small-caps;
+        }
+
+.toright{
+
+  position: absolute;
+    bottom: 240px;
+    right: 480;
+    width: 100px;
+    height: 50px;
+    
+}
+.stock_graph{
+
+  position: absolute;
+    bottom: 228px;
+    right: 300;
+    width: 350px;
+    height:350px;
+    
+}
+
+.dog_gif{
+
+  position: absolute;
+    bottom: 400px;
+    right: 460;
+    width: 65px;
+    height:65px;
+
+}

@@ -5,10 +5,7 @@
   {% load static %}
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>Stock WatchDog</title>
-  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_modal.css' %}">  
-  
-  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style_home.css' %}">
-  
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style.css' %}">
   <script type="text/javascript" src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/stock_company-autocomplete.js' %}"></script>
@@ -24,30 +21,36 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">×</span>
-     <img src = "../static/loading-dog.gif" data-original = "../static/foo567.jpg" alt="Mountain View" class= "dog_gif" id = "stockgraph">
-    
-    <div class="sameline"><pre><p>Stock Name:               </p></pre></div>
-    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
-    <div class="sameline"><pre><p>Stock Symbol:                 </p></pre></div>
-    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit2"></div><br><br>
-    <div class="sameline"><pre><p>Stock Market:               </p></pre></div>
-    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
-    <div class="sameline"><pre><p>Stock Price:                        </p></pre></div>
-    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
-    <div class="sameline"><pre><p>Last Trade Date and Time: </p></pre></div>
-    <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
-    
+
+    <div class="toleft">
+      <div class="sameline"><pre><p>Stock Name:                        </p></pre></div>
+      <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit1"></div><br><br>
+      <div class="sameline"><pre><p>Stock Symbol:                      </p></pre></div>
+      <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit2"></div><br><br>
+      <div class="sameline"><pre><p>Stock Market:                       </p></pre></div>
+      <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit3"></div><br><br>
+      <div class="sameline"><pre><p>Stock Price:                           </p></pre></div>
+      <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit4"></div><br><br>
+      <div class="sameline"><pre><p>Last Trade Date and Time: </p></pre></div>
+      <div class="sameline"><input type="button" class="modalinfobuttons" value="Input Button" id = "hit5"></div><br><br>
+    </div>
 
     <div class="toright">
-      Quantity:
-      <input type="number" id ="quant" name="quantity" min="1" value="1">
-      Buy:
-      <input type="radio" id="radio1" name="market" value="buy" checked="checked">
-      <br>
-      Sell:
-      <input type="radio" id="radio2" name="market" value="sell">
-      <br>
-      <button class="button" type="submit" id="marketExecution" style="float:righ;t">Go</button>
+      <img src = "../static/loading-dog.gif" data-original = "../static/foo567.jpg" alt="Dog" class= "dog_gif" id = "stockgraph">
+
+      <div class="purchase">
+        <p>Quantity:</p>
+        <input type="number" id ="quant" name="quantity" min="1" value="1">
+        <br>
+        <p>Buy:</p>
+        <input type="radio" id="radio1" name="market" value="buy" checked="checked">
+        <br>
+        <p>Sell:</p>
+        <input type="radio" id="radio2" name="market" value="sell">
+        <br>
+        <button class="button" type="submit" id="marketExecution" style="float:righ;t">Go</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -85,13 +88,12 @@ if(document.getElementById("hiddendiv").innerHTML=="autocomplete"){
 		//the dog gif was increasing to the size of our graph.
 		setTimeout(function () {
 			document.getElementById("stockgraph").className="stock_graph";
-		    }, 10);			
-		
+		    }, 10);
+
 
 		    }, 3000);
-     		
+
      modal.style.display = "block";
- 
 }
 }
 
@@ -102,23 +104,24 @@ if(document.getElementById("hiddendiv").innerHTML=="autocomplete"){
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
-    
-//We need to change the image back to dog gif for the next time the user searches for a stock	
+//We need to change the image back to dog gif for the next time the user searches for a stock
     document.getElementById("stockgraph").className="dog_gif";
     document.getElementById("hiddendiv").innerHTML="not_autocomplete";
+    document.getElementById("quant").value = 1;
     $("#stockgraph").attr("src","../static/loading-dog.gif");
     $('#autocomplete').val("");
     modal.style.display = "none";
-    
+
    $.getJSON("delete_image").done(function(data){});
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    
+
     if (event.target == modal) {
         document.getElementById("stockgraph").className="dog_gif";
         document.getElementById("hiddendiv").innerHTML="not_autocomplete";
+        document.getElementById("quant").value = 1;
 	$("#stockgraph").attr("src","../static/loading-dog.gif");
         modal.style.display = "none";
     $('#autocomplete').val("");
@@ -134,7 +137,3 @@ window.onclick = function(event) {
 
 
 {% endblock%}
-
-
-
-

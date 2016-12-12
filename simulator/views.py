@@ -35,7 +35,7 @@ def getstockdata_views(request):
     lookuptimestamp = time.time()
     mydict[0]['LookupTimestamp'] = str(lookuptimestamp)
     p = json.dumps(mydict)
-    plt.rcParams['axes.facecolor'] = '#33cc33'
+    plt.rcParams['axes.facecolor'] = '#99ff99'
     end = datetime.datetime.now()
     start = datetime.datetime(end.year - 1, end.month, end.day)
     df = web.DataReader(query_str, "yahoo", start, end)

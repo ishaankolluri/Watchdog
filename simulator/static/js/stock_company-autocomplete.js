@@ -6710,6 +6710,7 @@ $(function(){
     onSelect: function (suggestion) {
 	document.getElementById("hit1").value=suggestion.value;
 	document.getElementById("hiddendiv").innerHTML="autocomplete";
+        document.getElementById("quant").value = 1;
 	getstockdata(suggestion.data);
     }
   });
@@ -6731,6 +6732,7 @@ function getstockdata(stocksymbol){
 	// When the button is clicked, extract the input data.
 	$('#marketExecution').click(function(){
            document.getElementById("hiddendiv").innerHTML="not_autocomplete";
+
 	    var tradeType = "";
 	    if($("#radio1").prop('checked')){
 	        tradeType = "buy";
@@ -6759,6 +6761,7 @@ function getstockdata(stocksymbol){
 	        $("#marketExecution").unbind("click");
 	    });
 	    $.getJSON("delete_image").done(function(data){});
+
 	});
 
 	//change the image back to dog gif for the next stock search

@@ -6747,6 +6747,7 @@ function getstockdata(stocksymbol){
 	        $('#myModal').hide();
 	        $('#autocomplete').val("");
 	        $('#outerMarketStatus').text(data.message);
+	        $("#quant").val(1);
 	        $("#marketExecution").unbind("click");
 
 	    }).error(function(data){
@@ -6754,6 +6755,7 @@ function getstockdata(stocksymbol){
 	        $('#autocomplete').val("");
 	        console.log(data.responseText);
 	        $('#outerMarketStatus').text(JSON.parse(data.responseText).message);
+	        $("#quant").val(1);
 	        $("#marketExecution").unbind("click");
 	    });
 	    $.getJSON("delete_image").done(function(data){});

@@ -176,10 +176,6 @@ def profile(request):
         positions = Position.objects.filter(user=request.user)
         portfolio_value = 0
         for position in positions:
-            i = Instrument.objects.get(symbol=position.symbol)
-            updated_price = getQuotes(
-                [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
-            i.update_price(updated_price)
             portfolio_value = portfolio_value + \
                               (position.instrument.current_price *
                                position.quantity_purchased)
@@ -216,9 +212,6 @@ def _update_and_return_user_portfolio_value(user):
     net_plus_minus = 0
     for position in positions:
         i = position.instrument
-        updated_price = getQuotes(
-            [position.symbol, 'NASDAQ'])[0]["LastTradePrice"]
-        i.update_price(updated_price)
         portfolio_value = portfolio_value + \
                           (i.current_price * position.quantity_purchased)
         net_plus_minus = \

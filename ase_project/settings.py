@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_nose',
+    'django_cron',
 ]
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -46,6 +47,10 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=simulator',
+]
+
+CRON_CLASSES = [
+"simulator.cron.MyCronJob",
 ]
 
 MIDDLEWARE = [

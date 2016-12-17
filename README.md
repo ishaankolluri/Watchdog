@@ -1,4 +1,6 @@
 # Watchdog
+
+![Screenshot](watchdog_img.png)
 Watchdog is a stock simulation application that is meant to be very basic.
 Its end goal is to offer basic buy/sell features, limited information on stocks, and a competitive leaderboard.
 ## Requirements

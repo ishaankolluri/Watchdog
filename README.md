@@ -1,7 +1,6 @@
 # Watchdog
 Watchdog is a stock simulation application that is meant to be very basic.
 Its end goal is to offer basic buy/sell features, limited information on stocks, and a competitive leaderboard.
-#### TODO: Switch DB backend from SQLite3 to Postgres.
 ## Requirements
 ### System Requirements
 `virtualenv`
